@@ -1,0 +1,1 @@
+drop table if exists label_road_10; create table label_road_10 as select train_alluser_set_road_10.card_id,lengthb(positive_set_road_10.card_id) as label from train_alluser_set_road_10 left join positive_set_road_10 on train_alluser_set_road_10.card_id=positive_set_road_10.card_id;

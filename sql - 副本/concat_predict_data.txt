@@ -1,0 +1,1 @@
+drop table if exists gd_predict as select * from(select * from final_road_12 union all select * from final_road_15 union all select * from final_road_2 union all select * from final_road_8 union all select * from final_road_10 union all select * from final_road_4 union all select * from final_road_7)

@@ -1,0 +1,11 @@
+drop table if exists recent_day_count_percent_road_12; 
+create table recent_day_count_percent_road_12 as 
+select recent_day_count_road_12_365.card_id, 
+(cast(recent_day_count_road_12_1.day_count_1 as double)/cast(recent_day_count_road_12_365.day_count_365 as double)) as day_count_percent_1, 
+(cast(recent_day_count_road_12_5.day_count_5 as double)/cast(recent_day_count_road_12_365.day_count_365 as double)) as day_count_percent_5, 
+(cast(recent_day_count_road_12_7.day_count_7 as double)/cast(recent_day_count_road_12_365.day_count_365 as double)) as day_count_percent_7, 
+(cast(recent_day_count_road_12_30.day_count_30 as double)/cast(recent_day_count_road_12_365.day_count_365 as double)) as day_count_percent_30 
+ from recent_day_count_road_12_365 left outer join recent_day_count_road_12_1 on recent_day_count_road_12_365.card_id=recent_day_count_road_12_1.card_id
+ left outer join recent_day_count_road_12_5 on recent_day_count_road_12_365.card_id=recent_day_count_road_12_5.card_id
+ left outer join recent_day_count_road_12_7 on recent_day_count_road_12_365.card_id=recent_day_count_road_12_7.card_id
+ left outer join recent_day_count_road_12_30 on recent_day_count_road_12_365.card_id=recent_day_count_road_12_30.card_id;

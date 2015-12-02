@@ -1,0 +1,1 @@
+drop table if exists train_alluser_set_road_2; create table train_alluser_set_road_2 as select distinct(card_id) from gd_train_data_2 where deal_time>='2014080105' and deal_time<'2014122505';

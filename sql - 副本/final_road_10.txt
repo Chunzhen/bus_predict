@@ -1,0 +1,1 @@
+drop table if exists final_road_10; create table final_road_10 as select card_id,regexp_replace('abc','abc','线路10') as line_name from predict_road_10 where prediction_result=32;

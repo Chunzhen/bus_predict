@@ -1,0 +1,1 @@
+drop table if exists positive_set_road_15; create table positive_set_road_15 as select distinct(card_id) from gd_train_data_15 where deal_time>='2014122505' and deal_time<'2015010105';

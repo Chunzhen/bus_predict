@@ -1,0 +1,1 @@
+drop table if exists label_road_2; create table label_road_2 as select train_alluser_set_road_2.card_id,regexp_replace(length(positive_set_road_2.card_id) as string,'32','1') as label from train_alluser_set_road_2 left outer join positive_set_road_2 on train_alluser_set_road_2.card_id=positive_set_road_2.card_id;

@@ -1,0 +1,16 @@
+drop table if exists recent_day_count_road_10; create recent_day_count_road_10 as select 
+a.card_id, day_count_1, day_count_2, day_count_3, day_count_4, day_count_5, day_count_6, day_count_7, day_count_10, day_count_15, day_count_30, day_count_60, day_count_365
+ from 
+(select card_id from gd_train_data_10 group by card_id) a join 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_1 from gd_train_data_10 where deal_time>='2014122305' and deal_time<'2014122405' group by Card_id) day_count_1 on a.card_id=day_count_1.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_2 from gd_train_data_10 where deal_time>='2014122205' and deal_time<'2014122405' group by Card_id) day_count_2 on a.card_id=day_count_2.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_3 from gd_train_data_10 where deal_time>='2014122105' and deal_time<'2014122405' group by Card_id) day_count_3 on a.card_id=day_count_3.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_4 from gd_train_data_10 where deal_time>='2014122005' and deal_time<'2014122405' group by Card_id) day_count_4 on a.card_id=day_count_4.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_5 from gd_train_data_10 where deal_time>='2014121905' and deal_time<'2014122405' group by Card_id) day_count_5 on a.card_id=day_count_5.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_6 from gd_train_data_10 where deal_time>='2014121805' and deal_time<'2014122405' group by Card_id) day_count_6 on a.card_id=day_count_6.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_7 from gd_train_data_10 where deal_time>='2014121705' and deal_time<'2014122405' group by Card_id) day_count_7 on a.card_id=day_count_7.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_10 from gd_train_data_10 where deal_time>='2014121405' and deal_time<'2014122405' group by Card_id) day_count_10 on a.card_id=day_count_10.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_15 from gd_train_data_10 where deal_time>='2014120905' and deal_time<'2014122405' group by Card_id) day_count_15 on a.card_id=day_count_15.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_30 from gd_train_data_10 where deal_time>='2014112405' and deal_time<'2014122405' group by Card_id) day_count_30 on a.card_id=day_count_30.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_60 from gd_train_data_10 where deal_time>='2014102505' and deal_time<'2014122405' group by Card_id) day_count_60 on a.card_id=day_count_60.card_id 
+(select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_365 from gd_train_data_10 where deal_time>='2013122405' and deal_time<'2014122405' group by Card_id) day_count_365 on a.card_id=day_count_365.card_id 

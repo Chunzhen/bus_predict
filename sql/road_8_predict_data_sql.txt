@@ -1,0 +1,73 @@
+drop table if exists recent_day_count_road_8_predict; create table recent_day_count_road_8_predict as select 
+a.card_id, day_count_1, (cast(day_count_1 as double) / cast(day_count_365 as double)) as day_count_percent_1, day_count_2, day_count_3, day_count_4, day_count_5, (cast(day_count_5 as double) / cast(day_count_365 as double)) as day_count_percent_5, day_count_6, day_count_7, (cast(day_count_7 as double) / cast(day_count_365 as double)) as day_count_percent_7, day_count_10, day_count_15, day_count_30, (cast(day_count_30 as double) / cast(day_count_365 as double)) as day_count_percent_30, day_count_60, day_count_365
+ from 
+(select distinct(card_id) from gd_train_data_8 where deal_time<'2014123105') a 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_1 from gd_train_data_8 where deal_time>='2014123005' and deal_time<'2014123105' group by Card_id) table_day_count_1 on a.card_id=table_day_count_1.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_2 from gd_train_data_8 where deal_time>='2014122905' and deal_time<'2014123105' group by Card_id) table_day_count_2 on a.card_id=table_day_count_2.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_3 from gd_train_data_8 where deal_time>='2014122805' and deal_time<'2014123105' group by Card_id) table_day_count_3 on a.card_id=table_day_count_3.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_4 from gd_train_data_8 where deal_time>='2014122705' and deal_time<'2014123105' group by Card_id) table_day_count_4 on a.card_id=table_day_count_4.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_5 from gd_train_data_8 where deal_time>='2014122605' and deal_time<'2014123105' group by Card_id) table_day_count_5 on a.card_id=table_day_count_5.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_6 from gd_train_data_8 where deal_time>='2014122505' and deal_time<'2014123105' group by Card_id) table_day_count_6 on a.card_id=table_day_count_6.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_7 from gd_train_data_8 where deal_time>='2014122405' and deal_time<'2014123105' group by Card_id) table_day_count_7 on a.card_id=table_day_count_7.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_10 from gd_train_data_8 where deal_time>='2014122105' and deal_time<'2014123105' group by Card_id) table_day_count_10 on a.card_id=table_day_count_10.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_15 from gd_train_data_8 where deal_time>='2014121605' and deal_time<'2014123105' group by Card_id) table_day_count_15 on a.card_id=table_day_count_15.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_30 from gd_train_data_8 where deal_time>='2014120105' and deal_time<'2014123105' group by Card_id) table_day_count_30 on a.card_id=table_day_count_30.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_60 from gd_train_data_8 where deal_time>='2014110105' and deal_time<'2014123105' group by Card_id) table_day_count_60 on a.card_id=table_day_count_60.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_365 from gd_train_data_8 where deal_time>='2013123105' and deal_time<'2014123105' group by Card_id) table_day_count_365 on a.card_id=table_day_count_365.card_id 
+;
+
+
+drop table if exists count_beyond_two_times_road_8_predict; 
+create table count_beyond_two_times_road_8_predict as select c.card_id,a.beyond_two_count_7,b.beyond_two_count_30 from 
+(select distinct(card_id) from gd_train_data_8 where deal_time<'2014123105') c left outer join
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_7 from gd_train_data_8 where deal_time>='2014122405' and deal_time<'2014123105' group by Card_id) a on c.card_id=a.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_30 from gd_train_data_8 where deal_time>='2014120105' and deal_time<'2014123105' group by Card_id) b on c.card_id=b.card_id;
+
+drop table if exists weekday_weekend_count_road_8_predict;
+ create table weekday_weekend_count_road_8_predict as select 
+a.card_id, weekday_1.weekday_count_1, weekend_1.weekend_count_1, cast(weekday_1.weekday_count_1 as double)/cast((weekday_1.weekday_count_1)+(weekend_1.weekend_count_1) as double) as weekday_percent_1, traffic_1.traffic_count_1, cast(traffic_1.traffic_count_1 as double)/cast((weekday_1.weekday_count_1)+(weekend_1.weekend_count_1) as double) as traffic_percent_1 
+, weekday_2.weekday_count_2, weekend_2.weekend_count_2, cast(weekday_2.weekday_count_2 as double)/cast((weekday_2.weekday_count_2)+(weekend_2.weekend_count_2) as double) as weekday_percent_2, traffic_2.traffic_count_2, cast(traffic_2.traffic_count_2 as double)/cast((weekday_2.weekday_count_2)+(weekend_2.weekend_count_2) as double) as traffic_percent_2 
+, weekday_3.weekday_count_3, weekend_3.weekend_count_3, cast(weekday_3.weekday_count_3 as double)/cast((weekday_3.weekday_count_3)+(weekend_3.weekend_count_3) as double) as weekday_percent_3, traffic_3.traffic_count_3, cast(traffic_3.traffic_count_3 as double)/cast((weekday_3.weekday_count_3)+(weekend_3.weekend_count_3) as double) as traffic_percent_3 
+, weekday_4.weekday_count_4, weekend_4.weekend_count_4, cast(weekday_4.weekday_count_4 as double)/cast((weekday_4.weekday_count_4)+(weekend_4.weekend_count_4) as double) as weekday_percent_4, traffic_4.traffic_count_4, cast(traffic_4.traffic_count_4 as double)/cast((weekday_4.weekday_count_4)+(weekend_4.weekend_count_4) as double) as traffic_percent_4 
+ from
+ (select distinct(card_id) from gd_train_data_8 where deal_time<'2014123105') a left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_1 from gd_train_data_8
+ where deal_time>='2014122405' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_1 on a.card_id=weekday_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_1 from gd_train_data_8
+ where deal_time>='2014122405' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_1 on a.card_id=weekend_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_1 from gd_train_data_8
+ where deal_time>='2014122405' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_1 on a.card_id=traffic_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_2 from gd_train_data_8
+ where deal_time>='2014121705' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_2 on a.card_id=weekday_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_2 from gd_train_data_8
+ where deal_time>='2014121705' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_2 on a.card_id=weekend_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_2 from gd_train_data_8
+ where deal_time>='2014121705' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_2 on a.card_id=traffic_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_3 from gd_train_data_8
+ where deal_time>='2014121005' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_3 on a.card_id=weekday_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_3 from gd_train_data_8
+ where deal_time>='2014121005' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_3 on a.card_id=weekend_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_3 from gd_train_data_8
+ where deal_time>='2014121005' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_3 on a.card_id=traffic_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_4 from gd_train_data_8
+ where deal_time>='2014120305' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_4 on a.card_id=weekday_4.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_4 from gd_train_data_8
+ where deal_time>='2014120305' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_4 on a.card_id=weekend_4.card_id left outer join
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_4 from gd_train_data_8
+ where deal_time>='2014120305' and deal_time<'2014123105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_4 on a.card_id=traffic_4.card_id; 
+
+drop table if exists type_road_8_predict; create table type_road_8_predict as select t.card_id,t.card_type_key,t.create_city_key from 
+(select a.card_id,b.card_type_key,c.create_city_key,row_number() over(partition by a.card_id order by a.card_type desc) as rank from 
+(select card_id,card_type,create_city from gd_train_data_8 where deal_time<'2014123105') a left outer join 
+ (select card_type_key,card_type from card_type_table) b on a.card_type=b.card_type left outer join 
+ (select create_city_key,create_city from create_city_table) c on a.create_city=c.create_city ) t where t.rank=1; 
+
+drop table if exists predict_data_road_8_predict; 
+create table predict_data_road_8_predict as 
+select recent_day_count_road_8_predict.card_id, recent_day_count_road_8_predict.day_count_1, recent_day_count_road_8_predict.day_count_percent_1, recent_day_count_road_8_predict.day_count_2, recent_day_count_road_8_predict.day_count_3, recent_day_count_road_8_predict.day_count_4, recent_day_count_road_8_predict.day_count_5, recent_day_count_road_8_predict.day_count_percent_5, recent_day_count_road_8_predict.day_count_6, recent_day_count_road_8_predict.day_count_7, recent_day_count_road_8_predict.day_count_percent_7, recent_day_count_road_8_predict.day_count_10, recent_day_count_road_8_predict.day_count_15, recent_day_count_road_8_predict.day_count_30, recent_day_count_road_8_predict.day_count_percent_30, recent_day_count_road_8_predict.day_count_60, recent_day_count_road_8_predict.day_count_365, count_beyond_two_times_road_8_predict.beyond_two_count_7, count_beyond_two_times_road_8_predict.beyond_two_count_30,weekday_weekend_count_road_8_predict.weekday_count_1, weekday_weekend_count_road_8_predict.weekend_count_1, weekday_weekend_count_road_8_predict.weekday_percent_1, weekday_weekend_count_road_8_predict.traffic_count_1, weekday_weekend_count_road_8_predict.traffic_percent_1 
+,weekday_weekend_count_road_8_predict.weekday_count_2, weekday_weekend_count_road_8_predict.weekend_count_2, weekday_weekend_count_road_8_predict.weekday_percent_2, weekday_weekend_count_road_8_predict.traffic_count_2, weekday_weekend_count_road_8_predict.traffic_percent_2 
+,weekday_weekend_count_road_8_predict.weekday_count_3, weekday_weekend_count_road_8_predict.weekend_count_3, weekday_weekend_count_road_8_predict.weekday_percent_3, weekday_weekend_count_road_8_predict.traffic_count_3, weekday_weekend_count_road_8_predict.traffic_percent_3 
+,weekday_weekend_count_road_8_predict.weekday_count_4, weekday_weekend_count_road_8_predict.weekend_count_4, weekday_weekend_count_road_8_predict.weekday_percent_4, weekday_weekend_count_road_8_predict.traffic_count_4, weekday_weekend_count_road_8_predict.traffic_percent_4 
+,type_road_8_predict.create_city_key,type_road_8_predict.card_type_key 
+from recent_day_count_road_8_predict left outer join count_beyond_two_times_road_8_predict on recent_day_count_road_8_predict.card_id=count_beyond_two_times_road_8_predict.card_id left outer join weekday_weekend_count_road_8_predict on recent_day_count_road_8_predict.card_id=weekday_weekend_count_road_8_predict.card_id left outer join type_road_8_predict on recent_day_count_road_8_predict.card_id=type_road_8_predict.card_id;
+

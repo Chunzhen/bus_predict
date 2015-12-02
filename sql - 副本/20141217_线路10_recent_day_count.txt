@@ -1,0 +1,11 @@
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014121605' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014121505' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014121405' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014121305' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014121205' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014121105' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014121005' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014120705' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014120205' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014111705' group by Card_id;
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014101805' group by Card_id;

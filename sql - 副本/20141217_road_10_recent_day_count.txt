@@ -1,0 +1,11 @@
+drop table if exists recent_day_count_road_10_1; create table recent_day_count_road_10_1 as select Card_id, count(*) as day_count_1 from gd_train_data_10 where deal_time>='2014121605' group by Card_id;
+drop table if exists recent_day_count_road_10_2; create table recent_day_count_road_10_2 as select Card_id, count(*) as day_count_2 from gd_train_data_10 where deal_time>='2014121505' group by Card_id;
+drop table if exists recent_day_count_road_10_3; create table recent_day_count_road_10_3 as select Card_id, count(*) as day_count_3 from gd_train_data_10 where deal_time>='2014121405' group by Card_id;
+drop table if exists recent_day_count_road_10_4; create table recent_day_count_road_10_4 as select Card_id, count(*) as day_count_4 from gd_train_data_10 where deal_time>='2014121305' group by Card_id;
+drop table if exists recent_day_count_road_10_5; create table recent_day_count_road_10_5 as select Card_id, count(*) as day_count_5 from gd_train_data_10 where deal_time>='2014121205' group by Card_id;
+drop table if exists recent_day_count_road_10_6; create table recent_day_count_road_10_6 as select Card_id, count(*) as day_count_6 from gd_train_data_10 where deal_time>='2014121105' group by Card_id;
+drop table if exists recent_day_count_road_10_7; create table recent_day_count_road_10_7 as select Card_id, count(*) as day_count_7 from gd_train_data_10 where deal_time>='2014121005' group by Card_id;
+drop table if exists recent_day_count_road_10_10; create table recent_day_count_road_10_10 as select Card_id, count(*) as day_count_10 from gd_train_data_10 where deal_time>='2014120705' group by Card_id;
+drop table if exists recent_day_count_road_10_15; create table recent_day_count_road_10_15 as select Card_id, count(*) as day_count_15 from gd_train_data_10 where deal_time>='2014120205' group by Card_id;
+drop table if exists recent_day_count_road_10_30; create table recent_day_count_road_10_30 as select Card_id, count(*) as day_count_30 from gd_train_data_10 where deal_time>='2014111705' group by Card_id;
+drop table if exists recent_day_count_road_10_60; create table recent_day_count_road_10_60 as select Card_id, count(*) as day_count_60 from gd_train_data_10 where deal_time>='2014101805' group by Card_id;

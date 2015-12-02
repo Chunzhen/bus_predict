@@ -1,0 +1,1 @@
+drop table if exists test_data_road_7; create table test_data_road_7 as select recent_day_count_road_7.*,label_road_7.label from label_road_7 left outer join recent_day_count_road_7 on label_road_7.card_id=recent_day_count_road_7.card_id;

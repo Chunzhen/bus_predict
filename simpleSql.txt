@@ -1,0 +1,9 @@
+获取一个用户乘坐某路线的总次数
+select Card_id, count(*) as total_count from tianchi_gd.gd_train_data where Line_name='线路10' group by Card_id
+获取一个用户乘坐某路线的最后一次乘坐时间
+select Card_id, max(deal_time) from tianchi_gd.gd_train_data where Line_name='线路10' group by Card_id
+获取一个用户乘坐某路线的第一次乘坐时间
+select Card_id, min(deal_time) from tianchi_gd.gd_train_data where Line_name='线路10' group by Card_id
+最近一天
+select Card_id, count(*) from tianchi_gd.gd_train_data where Line_name='线路10' AND deal_time>='2014123105' group by Card_id
+最近两天

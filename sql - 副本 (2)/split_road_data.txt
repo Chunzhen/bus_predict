@@ -1,0 +1,7 @@
+drop table if exists gd_train_data_12; create table gd_train_data_12 as select * from tianchi_gd.gd_train_data where line_name='线路12';
+drop table if exists gd_train_data_15; create table gd_train_data_15 as select * from tianchi_gd.gd_train_data where line_name='线路15';
+drop table if exists gd_train_data_2; create table gd_train_data_2 as select * from tianchi_gd.gd_train_data where line_name='线路2';
+drop table if exists gd_train_data_8; create table gd_train_data_8 as select * from tianchi_gd.gd_train_data where line_name='线路8';
+drop table if exists gd_train_data_10; create table gd_train_data_10 as select * from tianchi_gd.gd_train_data where line_name='线路10';
+drop table if exists gd_train_data_4; create table gd_train_data_4 as select * from tianchi_gd.gd_train_data where line_name='线路4';
+drop table if exists gd_train_data_7; create table gd_train_data_7 as select * from tianchi_gd.gd_train_data where line_name='线路7';

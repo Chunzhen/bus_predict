@@ -1,0 +1,34 @@
+drop table if exists hour_count_road_19_predict;
+ create table hour_count_road_19_predict as select 
+a.card_id , week_1_hour_6.week_1_hour_count_6 , week_1_hour_7.week_1_hour_count_7 , week_1_hour_8.week_1_hour_count_8 , week_1_hour_9.week_1_hour_count_9 , week_1_hour_10.week_1_hour_count_10 , week_1_hour_11.week_1_hour_count_11 , week_1_hour_12.week_1_hour_count_12 , week_1_hour_13.week_1_hour_count_13 , week_1_hour_14.week_1_hour_count_14 , week_1_hour_15.week_1_hour_count_15 , week_1_hour_16.week_1_hour_count_16 , week_1_hour_17.week_1_hour_count_17 , week_1_hour_18.week_1_hour_count_18 , week_1_hour_19.week_1_hour_count_19 , week_1_hour_20.week_1_hour_count_20 from
+ (select card_id from gd_train_data_19 where deal_time<'2014123105' group by card_id) a left outer join 
+(select card_id, count(*) as week_1_hour_count_6 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=6  group by card_id) week_1_hour_6 on a.card_id=week_1_hour_6.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_7 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=7  group by card_id) week_1_hour_7 on a.card_id=week_1_hour_7.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_8 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=8  group by card_id) week_1_hour_8 on a.card_id=week_1_hour_8.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_9 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=9  group by card_id) week_1_hour_9 on a.card_id=week_1_hour_9.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_10 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=10  group by card_id) week_1_hour_10 on a.card_id=week_1_hour_10.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_11 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=11  group by card_id) week_1_hour_11 on a.card_id=week_1_hour_11.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_12 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=12  group by card_id) week_1_hour_12 on a.card_id=week_1_hour_12.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_13 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=13  group by card_id) week_1_hour_13 on a.card_id=week_1_hour_13.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_14 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=14  group by card_id) week_1_hour_14 on a.card_id=week_1_hour_14.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_15 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=15  group by card_id) week_1_hour_15 on a.card_id=week_1_hour_15.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_16 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=16  group by card_id) week_1_hour_16 on a.card_id=week_1_hour_16.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_17 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=17  group by card_id) week_1_hour_17 on a.card_id=week_1_hour_17.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_18 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=18  group by card_id) week_1_hour_18 on a.card_id=week_1_hour_18.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_19 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=19  group by card_id) week_1_hour_19 on a.card_id=week_1_hour_19.card_id left outer join 
+(select card_id, count(*) as week_1_hour_count_20 from  gd_train_data_19
+ where deal_time>='2014122405' and deal_time<'2014123105' and  datepart(to_date(deal_time,'yyyymmddhh'),'hh')=20  group by card_id) week_1_hour_20 on a.card_id=week_1_hour_20.card_id; 

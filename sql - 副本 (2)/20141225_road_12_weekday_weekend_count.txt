@@ -1,0 +1,32 @@
+drop table if exists weekday_weekend_count_road_12_test;
+ create table weekday_weekend_count_road_12_test as select 
+a.card_id, weekday_1.weekday_count_1, weekend_1.weekend_count_1, cast(weekday_1.weekday_count_1 as double)/cast((weekday_1.weekday_count_1)+(weekend_1.weekend_count_1) as double) as weekday_percent_1, traffic_1.traffic_count_1, cast(traffic_1.traffic_count_1 as double)/cast((weekday_1.weekday_count_1)+(weekend_1.weekend_count_1) as double) as traffic_percent_1 
+, weekday_2.weekday_count_2, weekend_2.weekend_count_2, cast(weekday_2.weekday_count_2 as double)/cast((weekday_2.weekday_count_2)+(weekend_2.weekend_count_2) as double) as weekday_percent_2, traffic_2.traffic_count_2, cast(traffic_2.traffic_count_2 as double)/cast((weekday_2.weekday_count_2)+(weekend_2.weekend_count_2) as double) as traffic_percent_2 
+, weekday_3.weekday_count_3, weekend_3.weekend_count_3, cast(weekday_3.weekday_count_3 as double)/cast((weekday_3.weekday_count_3)+(weekend_3.weekend_count_3) as double) as weekday_percent_3, traffic_3.traffic_count_3, cast(traffic_3.traffic_count_3 as double)/cast((weekday_3.weekday_count_3)+(weekend_3.weekend_count_3) as double) as traffic_percent_3 
+, weekday_4.weekday_count_4, weekend_4.weekend_count_4, cast(weekday_4.weekday_count_4 as double)/cast((weekday_4.weekday_count_4)+(weekend_4.weekend_count_4) as double) as weekday_percent_4, traffic_4.traffic_count_4, cast(traffic_4.traffic_count_4 as double)/cast((weekday_4.weekday_count_4)+(weekend_4.weekend_count_4) as double) as traffic_percent_4 
+ from
+ (select card_id from gd_train_data_12 where deal_time<'2014122505' group by card_id) a left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_1 from gd_train_data_12
+ where deal_time>='2014121805' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_1 on a.card_id=weekday_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_1 from gd_train_data_12
+ where deal_time>='2014121805' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_1 on a.card_id=weekend_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_1 from gd_train_data_12
+ where deal_time>='2014121805' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_1 on a.card_id=traffic_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_2 from gd_train_data_12
+ where deal_time>='2014121105' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_2 on a.card_id=weekday_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_2 from gd_train_data_12
+ where deal_time>='2014121105' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_2 on a.card_id=weekend_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_2 from gd_train_data_12
+ where deal_time>='2014121105' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_2 on a.card_id=traffic_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_3 from gd_train_data_12
+ where deal_time>='2014120405' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_3 on a.card_id=weekday_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_3 from gd_train_data_12
+ where deal_time>='2014120405' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_3 on a.card_id=weekend_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_3 from gd_train_data_12
+ where deal_time>='2014120405' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_3 on a.card_id=traffic_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_4 from gd_train_data_12
+ where deal_time>='2014112705' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_4 on a.card_id=weekday_4.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_4 from gd_train_data_12
+ where deal_time>='2014112705' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_4 on a.card_id=weekend_4.card_id left outer join
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_4 from gd_train_data_12
+ where deal_time>='2014112705' and deal_time<'2014122505' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_4 on a.card_id=traffic_4.card_id; 

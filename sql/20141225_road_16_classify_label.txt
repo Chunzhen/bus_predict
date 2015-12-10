@@ -1,0 +1,6 @@
+drop table if exists label_road_16_test; 
+create table label_road_16_test as select 
+ card_id,regexp_replace(cast(length(card_id2) as string),'32','1') as label  from 
+ (select card_id as card_id from gd_train_data_16 where deal_time<'2014122505' group by card_id) a
+ left outer join 
+(select card_id as card_id2 from gd_train_data_16 where deal_time>='2014122505' and deal_time<'2015010105' group by card_id) b on a.card_id=b.card_id2;

@@ -1,0 +1,8 @@
+drop table if exists count_beyond_two_times_road_4_test3; 
+create table count_beyond_two_times_road_4_test3 as select c.card_id,a_3.beyond_two_count_3,a_7.beyond_two_count_7,a_14.beyond_two_count_14,a_21.beyond_two_count_21,b.beyond_two_count_30 from 
+(select card_id from gd_train_data_4 where deal_time<'2014121105' group by card_id) c left outer join
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_3 from gd_train_data_4 where deal_time>='2014120805' and deal_time<'2014121105' group by Card_id) a_3 on c.card_id=a_3.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_7 from gd_train_data_4 where deal_time>='2014120405' and deal_time<'2014121105' group by Card_id) a_7 on c.card_id=a_7.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_14 from gd_train_data_4 where deal_time>='2014112705' and deal_time<'2014121105' group by Card_id) a_14 on c.card_id=a_14.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_21 from gd_train_data_4 where deal_time>='2014112005' and deal_time<'2014121105' group by Card_id) a_21 on c.card_id=a_21.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_30 from gd_train_data_4 where deal_time>='2014111105' and deal_time<'2014121105' group by Card_id) b on c.card_id=b.card_id;

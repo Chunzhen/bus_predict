@@ -11,7 +11,8 @@ class Sql_creation(object):
 	def __init__(self,base_day):
 		self.__base_day=base_day
 		self.__recent_day=[1,2,3,4,5,6,7,10,15,30,60,365]
-		self.__roads=['12','15','2','8','10','4','7']
+		self.__roads=['21','13','16','19','6','9','11'] #
+		#self.__roads=['12','15','2','8','10','4','7']
 
 	#拆分不同路线
 	def split_road_data(self):
@@ -19,7 +20,7 @@ class Sql_creation(object):
 		f=file(u'sql/split_road_data.txt','wb')
 		sql=''
 		for road in roads:
-			sql_str=u"drop table if exists gd_train_data_"+road+"; create table gd_train_data_"+road+" as select * from tianchi_gd.gd_train_data where line_name='线路"+road+"';"
+			sql_str=u"drop table if exists gd_train_data_"+road+"; create table gd_train_data_"+road+" as select * from tianchi_gd.p2_gd_train_data where line_name='线路"+road+"';"
 			f.write(sql_str+'\n')
 			sql+=sql_str
 		return sql
@@ -37,14 +38,14 @@ class Sql_creation(object):
 		sql+="drop table if exists recent_day_count_road_"+road+"_"+type+"; create table recent_day_count_road_"+road+"_"+type+" as select \n"
 		inner_sql=""
 		inner_select="a.card_id"
-		inner_sql+="(select distinct(card_id) from gd_train_data_"+road+" where deal_time<'"+base_day+"05') a \n"
+		inner_sql+="(select card_id from gd_train_data_"+road+" where deal_time<'"+base_day+"05' group by card_id) a \n"
 		for x in recent_day:
 			r_timestamp=timestamp-x*86400
 			d=datetime.fromtimestamp(float(r_timestamp))
 			dStr=str(d.year)+self.add_zero(d.month)+self.add_zero(d.day)+'05'
 			sql_str=u"left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_"+str(x)+" from gd_train_data_"+road+" where deal_time>='"+dStr+"' and deal_time<'"+base_day+"05' group by Card_id) table_day_count_"+str(x)+" on a.card_id=table_day_count_"+str(x)+".card_id \n"
 			inner_select+=", day_count_"+str(x)
-			if x==1 or x==5 or x==7 or x==30:
+			if x<=60:
 				inner_select+=", (cast(day_count_"+str(x)+" as double) / cast(day_count_365 as double)) as day_count_percent_"+str(x)
 			inner_sql+=sql_str
 		
@@ -59,15 +60,21 @@ class Sql_creation(object):
 		recent_day=self.__recent_day
 		d_base=datetime.strptime(str(base_day),'%Y%m%d')
 		timestamp=time.mktime(d_base.timetuple())
+		t=[3,7,14,21]
 		f=file(u'sql/'+base_day+'_road_'+road+'_count_beyond_two_times.txt','wb')
 		sql=""
 		sql+="drop table if exists count_beyond_two_times_road_"+road+"_"+type+"; \n"
-		sql+="create table count_beyond_two_times_road_"+road+"_"+type+" as select c.card_id,a.beyond_two_count_7,b.beyond_two_count_30 from \n"
-		sql+="(select distinct(card_id) from gd_train_data_"+road+" where deal_time<'"+base_day+"05') c left outer join\n"
-		r_timestamp=timestamp-7*86400
-		d=datetime.fromtimestamp(float(r_timestamp))
-		dStr=str(d.year)+self.add_zero(d.month)+self.add_zero(d.day)+'05'
-		sql+="(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_7 from gd_train_data_"+road+" where deal_time>='"+dStr+"' and deal_time<'"+base_day+"05' group by Card_id) a on c.card_id=a.card_id left outer join \n"
+		sql+="create table count_beyond_two_times_road_"+road+"_"+type+" as select c.card_id,";
+
+		for temp_t in t:
+			sql+="a_"+str(temp_t)+".beyond_two_count_"+str(temp_t)+",";
+		sql+="b.beyond_two_count_30 from \n"
+		sql+="(select card_id from gd_train_data_"+road+" where deal_time<'"+base_day+"05' group by card_id) c left outer join\n"
+		for temp_t in t:
+			r_timestamp=timestamp-temp_t*86400
+			d=datetime.fromtimestamp(float(r_timestamp))
+			dStr=str(d.year)+self.add_zero(d.month)+self.add_zero(d.day)+'05'
+			sql+="(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_"+str(temp_t)+" from gd_train_data_"+road+" where deal_time>='"+dStr+"' and deal_time<'"+base_day+"05' group by Card_id) a_"+str(temp_t)+" on c.card_id=a_"+str(temp_t)+".card_id left outer join \n"
 		r_timestamp=timestamp-30*86400
 		d=datetime.fromtimestamp(float(r_timestamp))
 		dStr=str(d.year)+self.add_zero(d.month)+self.add_zero(d.day)+'05'
@@ -84,7 +91,7 @@ class Sql_creation(object):
 		timestamp=time.mktime(d_base.timetuple())
 		f=file(u'sql/'+base_day+'_road_'+road+'_weekday_weekend_count.txt','wb')
 		sql="drop table if exists weekday_weekend_count_road_"+road+"_"+type+";\n create table weekday_weekend_count_road_"+road+"_"+type+" as select \n"
-		inner_sql="(select distinct(card_id) from gd_train_data_"+road+" where deal_time<'"+base_day+"05') a left outer join \n"
+		inner_sql="(select card_id from gd_train_data_"+road+" where deal_time<'"+base_day+"05' group by card_id) a left outer join \n"
 		inner_select=""
 		for i in range(4):
 			j=(i+1)*7
@@ -128,10 +135,10 @@ class Sql_creation(object):
 		timestamp=time.mktime(d_base.timetuple())
 		f=file(u'sql/'+base_day+'_road_'+road+'_hour_count.txt','wb')
 		sql="drop table if exists hour_count_road_"+road+"_"+type+";\n create table hour_count_road_"+road+"_"+type+" as select \n"
-		inner_sql="(select distinct(card_id) from gd_train_data_"+road+" where deal_time<'"+base_day+"05') a left outer join \n"
+		inner_sql="(select card_id from gd_train_data_"+road+" where deal_time<'"+base_day+"05' group by card_id) a left outer join \n"
 		inner_select="a.card_id"
 		for i in range(4):
-			if i<3:
+			if i>0:
 				continue
 			j=(i+1)*7
 			index=str(i+1)
@@ -142,7 +149,7 @@ class Sql_creation(object):
 				hour_index=str(k+6)
 				inner_select+=" , week_"+index+"_hour_"+hour_index+".week_"+index+"_hour_count_"+hour_index
 
-			if i==3:
+			if i==0:
 				for k in range(15):
 					hour_index=str(k+6)
 					if k==14:
@@ -160,40 +167,12 @@ class Sql_creation(object):
 		f .write(sql)
 		return sql
 
-	#正例集
-	def positive_set_sql(self,base_day1,base_day2,road):
-		base_day=self.__base_day
-		f=file(u'sql/'+base_day+'_road_'+road+'_positive_set.txt','wb')
-		d_base1=datetime.strptime(str(base_day1),'%Y%m%d')
-		dStr1=str(d_base1.year)+self.add_zero(d_base1.month)+self.add_zero(d_base1.day)+'05'
-		d_base2=datetime.strptime(str(base_day2),'%Y%m%d')
-		timestamp=time.mktime(d_base2.timetuple())+86400.0
-		d_base2=datetime.fromtimestamp(float(timestamp))
-		dStr2=str(d_base2.year)+self.add_zero(d_base2.month)+self.add_zero(d_base2.day)+'05'
-		sql="drop table if exists positive_set_road_"+road+"; create table positive_set_road_"+road+" as select distinct(card_id) from gd_train_data_"+road+" where deal_time>='"+dStr1+"' and deal_time<'"+dStr2+"';"
-		f.write(sql)
-		return sql+'\n'
-
-	#训练集所有用户
-	def train_alluser_set_sql(self,base_day1,base_day2,road):
-		base_day=self.__base_day
-		f=file(u'sql/'+base_day+'_road_'+road+'_train_alluser_set.txt','wb')
-		d_base1=datetime.strptime(str(base_day1),'%Y%m%d')
-		dStr1=str(d_base1.year)+self.add_zero(d_base1.month)+self.add_zero(d_base1.day)+'05'
-		d_base2=datetime.strptime(str(base_day2),'%Y%m%d')
-		timestamp=time.mktime(d_base2.timetuple())+86400.0
-		d_base2=datetime.fromtimestamp(float(timestamp))
-		dStr2=str(d_base2.year)+self.add_zero(d_base2.month)+self.add_zero(d_base2.day)+'05'
-		sql="drop table if exists train_alluser_set_road_"+road+"; create table train_alluser_set_road_"+road+" as select distinct(card_id) from gd_train_data_"+road+" where deal_time>='"+dStr1+"' and deal_time<'"+dStr2+"';"
-		f.write(sql)
-		return sql+'\n'
-
 	#训练集&&正例集=所有用户的标签
-	def classify_label_sql(self,base_day1,base_day2,base_day3,base_day4,road):
+	def classify_label_sql(self,base_day1,base_day2,base_day3,base_day4,road,type):
 		base_day=self.__base_day
 
 		f=file(u'sql/'+base_day+'_road_'+road+'_classify_label.txt','wb')
-		sql="drop table if exists label_road_"+road+"; \ncreate table label_road_"+road+" as select \n"
+		sql="drop table if exists label_road_"+road+"_"+type+"; \ncreate table label_road_"+road+"_"+type+" as select \n"
 		sql+=" card_id,regexp_replace(cast(length(card_id2) as string),'32','1') as label  from \n "
 		d_base1=datetime.strptime(str(base_day3),'%Y%m%d')
 		dStr1=str(d_base1.year)+self.add_zero(d_base1.month)+self.add_zero(d_base1.day)+'05'
@@ -201,14 +180,14 @@ class Sql_creation(object):
 		timestamp=time.mktime(d_base2.timetuple())
 		d_base2=datetime.fromtimestamp(float(timestamp))
 		dStr2=str(d_base2.year)+self.add_zero(d_base2.month)+self.add_zero(d_base2.day)+'05'
-		sql+="(select distinct(card_id) as card_id from gd_train_data_"+road+" where deal_time<'"+dStr2+"') a\n left outer join \n"
+		sql+="(select card_id as card_id from gd_train_data_"+road+" where deal_time<'"+dStr2+"' group by card_id) a\n left outer join \n"
 		d_base1=datetime.strptime(str(base_day1),'%Y%m%d')
 		dStr1=str(d_base1.year)+self.add_zero(d_base1.month)+self.add_zero(d_base1.day)+'05'
 		d_base2=datetime.strptime(str(base_day2),'%Y%m%d')
 		timestamp=time.mktime(d_base2.timetuple())+86400.0
 		d_base2=datetime.fromtimestamp(float(timestamp))
 		dStr2=str(d_base2.year)+self.add_zero(d_base2.month)+self.add_zero(d_base2.day)+'05'
-		sql+="(select distinct(card_id) as card_id2 from gd_train_data_"+road+" where deal_time>='"+dStr1+"' and deal_time<'"+dStr2+"') b on a.card_id=b.card_id2;\n"
+		sql+="(select card_id as card_id2 from gd_train_data_"+road+" where deal_time>='"+dStr1+"' and deal_time<'"+dStr2+"' group by card_id) b on a.card_id=b.card_id2;\n"
 		f.write(sql)
 		return sql+'\n'
 
@@ -230,14 +209,17 @@ class Sql_creation(object):
 		recent_count_select=""
 		for x in recent_day:
 			recent_count_select+=", recent_day_count_road_"+road+"_"+type+".day_count_"+str(x)
-			if x==1 or x==5 or x==7 or x==30:
+			if x<=60:
 				recent_count_select+=", recent_day_count_road_"+road+"_"+type+".day_count_percent_"+str(x)
 
 		f=file(u'sql/'+base_day+'_road_'+road+'column_concat.txt','wb')
 		sql="drop table if exists "+type+"_data_road_"+road+"; \n"
 		sql+="create table "+type+"_data_road_"+road+" as \n"
 		sql+="select recent_day_count_road_"+road+"_"+type+".card_id"+recent_count_select
-		sql+=", count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_7, count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_30"
+		sql+=", count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_30"
+		t=[3,7,14,21]
+		for temp_t in t:
+			sql+=", count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_"+str(temp_t);
 
 		weekday_weekend_select=""
 		for i in range(4):
@@ -249,14 +231,27 @@ class Sql_creation(object):
 			weekday_weekend_select+=", weekday_weekend_count_road_"+road+"_"+type+".traffic_percent_"+index
 			weekday_weekend_select+=" \n"
 
+		hour_select=""
+		for i in range(4):
+			if i>0:
+				continue
+			index=str(i+1)
+			for k in range(15):
+				hour_index=str(k+6)
+				hour_select+=" , hour_count_road_"+road+"_"+type+".week_"+index+"_hour_count_"+hour_index
+
+
 		sql+=weekday_weekend_select
+		sql+=hour_select
 		sql+=",type_road_"+road+"_"+type+".create_city_key,type_road_"+road+"_"+type+".card_type_key \n"
-		sql+=",cast(label_road_"+road+".label as int) as label \n"
-		sql+="from label_road_"+road+"\n"
-		sql+=" left outer join recent_day_count_road_"+road+"_"+type+" on label_road_"+road+".card_id=recent_day_count_road_"+road+"_"+type+".card_id\n"
-		sql+=" left outer join count_beyond_two_times_road_"+road+"_"+type+" on label_road_"+road+".card_id=count_beyond_two_times_road_"+road+"_"+type+".card_id\n"
-		sql+=" left outer join weekday_weekend_count_road_"+road+"_"+type+" on label_road_"+road+".card_id=weekday_weekend_count_road_"+road+"_"+type+".card_id\n"
-		sql+=" left outer join type_road_"+road+"_"+type+" on label_road_"+road+".card_id=type_road_"+road+"_"+type+".card_id;"
+		sql+=",cast(label_road_"+road+"_"+type+".label as int) as label \n"
+		sql+="from label_road_"+road+"_"+type+"\n"
+		sql+=" left outer join recent_day_count_road_"+road+"_"+type+" on label_road_"+road+"_"+type+".card_id=recent_day_count_road_"+road+"_"+type+".card_id\n"
+		sql+=" left outer join count_beyond_two_times_road_"+road+"_"+type+" on label_road_"+road+"_"+type+".card_id=count_beyond_two_times_road_"+road+"_"+type+".card_id\n"
+		sql+=" left outer join weekday_weekend_count_road_"+road+"_"+type+" on label_road_"+road+"_"+type+".card_id=weekday_weekend_count_road_"+road+"_"+type+".card_id\n"
+		sql+=" left outer join hour_count_road_"+road+"_"+type+" on label_road_"+road+"_"+type+".card_id=hour_count_road_"+road+"_"+type+".card_id\n"
+		sql+=" left outer join type_road_"+road+"_"+type+" on label_road_"+road+"_"+type+".card_id=type_road_"+road+"_"+type+".card_id;"
+		
 		f.write(sql)
 		return sql+'\n'
 
@@ -276,14 +271,17 @@ class Sql_creation(object):
 		recent_count_select=""
 		for x in recent_day:
 			recent_count_select+=", recent_day_count_road_"+road+"_"+type+".day_count_"+str(x)
-			if x==1 or x==5 or x==7 or x==30:
+			if x<=60:
 				recent_count_select+=", recent_day_count_road_"+road+"_"+type+".day_count_percent_"+str(x)
 
 		f=file(u'sql/'+base_day+'_road_'+road+'column_concat_predict.txt','wb')
 		sql="drop table if exists "+type+"_data_road_"+road+"_predict; \n"
 		sql+="create table "+type+"_data_road_"+road+"_predict as \n"
 		sql+="select recent_day_count_road_"+road+"_"+type+".card_id"+recent_count_select
-		sql+=", count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_7, count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_30"
+		sql+=", count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_30"
+		t=[3,7,14,21]
+		for temp_t in t:
+			sql+=", count_beyond_two_times_road_"+road+"_"+type+".beyond_two_count_"+str(temp_t);
 
 		weekday_weekend_select=""
 		for i in range(4):
@@ -295,11 +293,23 @@ class Sql_creation(object):
 			weekday_weekend_select+=", weekday_weekend_count_road_"+road+"_"+type+".traffic_percent_"+index
 			weekday_weekend_select+=" \n"
 
+		hour_select=""
+		for i in range(4):
+			if i>0:
+				continue
+			index=str(i+1)
+			for k in range(15):
+				hour_index=str(k+6)
+				hour_select+=" , hour_count_road_"+road+"_"+type+".week_"+index+"_hour_count_"+hour_index
+
+
 		sql+=weekday_weekend_select
+		sql+=hour_select
 		sql+=",type_road_"+road+"_"+type+".create_city_key,type_road_"+road+"_"+type+".card_type_key \n"
 		sql+="from recent_day_count_road_"+road+"_"+type
-		sql+=" left outer join count_beyond_two_times_road_"+road+"_"+type+" on recent_day_count_road_"+road+"_"+type+".card_id=count_beyond_two_times_road_"+road+"_"+type+".card_id"
-		sql+=" left outer join weekday_weekend_count_road_"+road+"_"+type+" on recent_day_count_road_"+road+"_"+type+".card_id=weekday_weekend_count_road_"+road+"_"+type+".card_id"
+		sql+=" left outer join count_beyond_two_times_road_"+road+"_"+type+" on recent_day_count_road_"+road+"_"+type+".card_id=count_beyond_two_times_road_"+road+"_"+type+".card_id\n"
+		sql+=" left outer join weekday_weekend_count_road_"+road+"_"+type+" on recent_day_count_road_"+road+"_"+type+".card_id=weekday_weekend_count_road_"+road+"_"+type+".card_id\n"
+		sql+=" left outer join hour_count_road_"+road+"_"+type+" on recent_day_count_road_"+road+"_"+type+".card_id=hour_count_road_"+road+"_"+type+".card_id\n"
 		sql+=" left outer join type_road_"+road+"_"+type+" on recent_day_count_road_"+road+"_"+type+".card_id=type_road_"+road+"_"+type+".card_id;"
 		f.write(sql)
 		return sql+'\n'
@@ -367,18 +377,37 @@ def get_train_data():
 
 def get_test_data():
 	roads=['12','15','2','8','10','4','7']
-	base_day='20141224'
+	#roads=['21','13','16','19','6','9','11']#
+	# base_day='20141225'
+	# #正例集
+	# base_day1='20141225'
+	# base_day2='20141231'
+	# #所有用户集
+	# base_day3='20140801'
+	# base_day4='20141225'
+	roads=['4']
+
+	# base_day='20141218'
+	# #正例集
+	# base_day1='20141218'
+	# base_day2='20141224'
+	# #所有用户集
+	# base_day3='20140801'
+	# base_day4='20141218'
+
+	base_day='20141211'
 	#正例集
-	base_day1='20141224'
-	base_day2='20141230'
+	base_day1='20141211'
+	base_day2='20141217'
 	#所有用户集
 	base_day3='20140801'
-	base_day4='20141224'
+	base_day4='20141211'
 	for road in roads:
-		get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,'test')
+		get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,'test3')
 
 def get_predict_data():
-	roads=['12','15','2','8','10','4','7'] 
+	#roads=['12','15','2','8','10','4','7'] 
+	roads=['21','13','16','19','6','9','11']
 	sql_instance=Sql_creation('20141231')
 	for x in roads:
 		_get_predict_data('20141231',x)
@@ -395,6 +424,8 @@ def _get_predict_data(base_day,road):
 	sql_arr.append(sql_instance.count_beyond_two_times_sql(road,type))
 	#weekday weeken
 	sql_arr.append(sql_instance.weekday_weekend_count_sql(road,type))
+	#hour
+	sql_arr.append(sql_instance.hour_count_sql(road,type))	
 	#type
 	sql_arr.append(sql_instance.type_sql(road,type))
 	#合并为一个表
@@ -413,8 +444,10 @@ def get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,type):
 	sql_arr.append(sql_instance.count_beyond_two_times_sql(road,type))
 	#weekday weeken
 	sql_arr.append(sql_instance.weekday_weekend_count_sql(road,type))	
+	#hour
+	sql_arr.append(sql_instance.hour_count_sql(road,type))	
 	#获取label
-	sql_arr.append(sql_instance.classify_label_sql(base_day1,base_day2,base_day3,base_day4,road))
+	sql_arr.append(sql_instance.classify_label_sql(base_day1,base_day2,base_day3,base_day4,road,type))
 	#type
 	sql_arr.append(sql_instance.type_sql(road,type))
 	#合并
@@ -426,8 +459,8 @@ def get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,type):
 		#run_sql(sql)
 
 def main():
-	#get_test_data()
-	#get_predict_data()
+	get_test_data()
+	get_predict_data()
 	#sql_instance=Sql_creation("20141231")
 	#sql_instance.get_predict_card_id('10')
 
@@ -452,21 +485,21 @@ def main():
 	# #所有用户集
 	# base_day3='20140801'
 	# base_day4='20141224'
-	sql_instance=Sql_creation("20141224")
-	sql_instance.hour_count_sql('4','test')
+	# sql_instance=Sql_creation("20141224")
+	# sql_instance.hour_count_sql('4','test')
 
 
 if __name__ == '__main__':
 	reload(sys)
 	sys.setdefaultencoding('utf8')
-	#main()
+	main()
 
 
-	# base_day='20141217'
-	# roads=['12','15','2','8','10','4','7']
-	# sql_instance=Sql_creation(base_day)
-	# #分开不同线路的交通数据
-	# #sql=sql_instance.split_road_data()
+	base_day='20141217'
+	#roads=['12','15','2','8','10','4','7']
+	sql_instance=Sql_creation(base_day)
+	#分开不同线路的交通数据
+	#sql=sql_instance.split_road_data()
 	# #计算不同路的用户最近1-60天的乘坐次数
 	# #sql=sql_instance.last_recent_day_count_sql(roads[4])
 	# #合并为一个表
@@ -486,8 +519,8 @@ if __name__ == '__main__':
 	# #print sql
 	# run_sql(sql)
 
-	st=""
-	for i in range(15):
-		st+=",hour_count_road_4_test.week_4_hour_count_"+str(int(i)+6)
+	# st=""
+	# for i in range(15):
+	# 	st+=",hour_count_road_4_test.week_4_hour_count_"+str(int(i)+6)
 
-	print st
+	# print st

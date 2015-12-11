@@ -1,0 +1,8 @@
+drop table if exists road_19_first_last_test3; create table road_19_first_last_test3 as select 
+ a.card_id,last_visit,first_visit,(first_visit-last_visit) as visit_range,(last_2_visit-last_visit) as visit_range2 
+ from 
+(select card_id from gd_train_data_19 where deal_time<'2014121105' group by card_id) a 
+left outer join (select t1.card_id,cast((1418227200 - unix_timestamp(to_date(t1.deal_time,'yyyymmddhh')))/86400 as int) as last_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data_19 where deal_time<'20141211') t1 where t1.rank=1 ) table_last on a.card_id=table_last.card_id 
+left outer join (select t2.card_id,cast((1418227200 - unix_timestamp(to_date(t2.deal_time,'yyyymmddhh')))/86400 as int) as first_visit  from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time asc) as rank from gd_train_data_19 where deal_time<'20141211') t2 where t2.rank=1 ) table_first on a.card_id=table_first.card_id 
+left outer join (select t3.card_id,cast((1418227200 - unix_timestamp(to_date(t3.deal_time,'yyyymmddhh')))/86400 as int) as last_2_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data_19 where deal_time<'20141211') t3 where t3.rank=2 ) table_last_2 on a.card_id=table_last_2.card_id 
+;

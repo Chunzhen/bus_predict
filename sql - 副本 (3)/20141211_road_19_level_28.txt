@@ -1,0 +1,8 @@
+drop table if exists road_19_level_28_test3; create table road_19_level_28_test3 as select 
+a.card_id , level_28_0, level_28_1, level_28_2
+ from 
+(select card_id from gd_train_data_19 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_28_0 from gd_train_data_19 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_28_0 on a.card_id=table_level_28_0.card_id 
+left outer join (select card_id, count(*) as level_28_1 from gd_train_data_19 where deal_time>='2014111105' and deal_time<'2014111305' group by card_id) table_level_28_1 on a.card_id=table_level_28_1.card_id 
+left outer join (select card_id, count(*) as level_28_2 from gd_train_data_19 where deal_time>='2014101405' and deal_time<'2014101605' group by card_id) table_level_28_2 on a.card_id=table_level_28_2.card_id 
+;

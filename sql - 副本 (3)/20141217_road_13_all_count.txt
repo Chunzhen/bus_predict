@@ -1,0 +1,6 @@
+drop table if exists road_13_all_count_test; create table road_13_all_count_test as select 
+a.card_id,one_count,all_count,one_count/all_count as road_count_percent 
+ from 
+(select card_id from gd_train_data_13 where deal_time<'2014121705' group by card_id) a 
+ left outer join (select card_id,count(*) as one_count from gd_train_data_13 where deal_time<'20141217' group by card_id ) t1 on t1.card_id=a.card_id 
+ left outer join (select card_id,count(*) as all_count from gd_train_data where deal_time<'20141217' group by card_id ) t2 on t2.card_id=a.card_id ;

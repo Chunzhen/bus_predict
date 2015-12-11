@@ -1,0 +1,15 @@
+drop table if exists road_4_level_7_test3; create table road_4_level_7_test3 as select 
+a.card_id , level_7_0, level_7_1, level_7_2, level_7_3, level_7_4, level_7_5, level_7_6, level_7_7, level_7_8, level_7_9
+ from 
+(select card_id from gd_train_data_4 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_7_0 from gd_train_data_4 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_7_0 on a.card_id=table_level_7_0.card_id 
+left outer join (select card_id, count(*) as level_7_1 from gd_train_data_4 where deal_time>='2014120205' and deal_time<'2014120405' group by card_id) table_level_7_1 on a.card_id=table_level_7_1.card_id 
+left outer join (select card_id, count(*) as level_7_2 from gd_train_data_4 where deal_time>='2014112505' and deal_time<'2014112705' group by card_id) table_level_7_2 on a.card_id=table_level_7_2.card_id 
+left outer join (select card_id, count(*) as level_7_3 from gd_train_data_4 where deal_time>='2014111805' and deal_time<'2014112005' group by card_id) table_level_7_3 on a.card_id=table_level_7_3.card_id 
+left outer join (select card_id, count(*) as level_7_4 from gd_train_data_4 where deal_time>='2014111105' and deal_time<'2014111305' group by card_id) table_level_7_4 on a.card_id=table_level_7_4.card_id 
+left outer join (select card_id, count(*) as level_7_5 from gd_train_data_4 where deal_time>='2014110405' and deal_time<'2014110605' group by card_id) table_level_7_5 on a.card_id=table_level_7_5.card_id 
+left outer join (select card_id, count(*) as level_7_6 from gd_train_data_4 where deal_time>='2014102805' and deal_time<'2014103005' group by card_id) table_level_7_6 on a.card_id=table_level_7_6.card_id 
+left outer join (select card_id, count(*) as level_7_7 from gd_train_data_4 where deal_time>='2014102105' and deal_time<'2014102305' group by card_id) table_level_7_7 on a.card_id=table_level_7_7.card_id 
+left outer join (select card_id, count(*) as level_7_8 from gd_train_data_4 where deal_time>='2014101405' and deal_time<'2014101605' group by card_id) table_level_7_8 on a.card_id=table_level_7_8.card_id 
+left outer join (select card_id, count(*) as level_7_9 from gd_train_data_4 where deal_time>='2014100705' and deal_time<'2014100905' group by card_id) table_level_7_9 on a.card_id=table_level_7_9.card_id 
+;

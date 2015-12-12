@@ -455,7 +455,7 @@ class Sql_creation(object):
 			allroad_weather_select+=", road_"+road+"_allroad_weather_count_"+type+".allroad_weather_"+str(w)
 			allroad_weather_select+=", road_"+road+"_allroad_weather_count_"+type+".allroad_weather_"+str(w)+"_percent"
 			oneroad_weather_select+=", road_"+road+"_oneroad_weather_count_"+type+".oneroad_weather_"+str(w)
-			allroad_weather_select+=", road_"+road+"_oneroad_weather_count_"+type+".oneroad_weather_"+str(w)+"_percent"
+			oneroad_weather_select+=", road_"+road+"_oneroad_weather_count_"+type+".oneroad_weather_"+str(w)+"_percent"
 			w+=1
 
 		sql+=weekday_weekend_select
@@ -568,7 +568,7 @@ class Sql_creation(object):
 			allroad_weather_select+=", road_"+road+"_allroad_weather_count_"+type+".allroad_weather_"+str(w)
 			allroad_weather_select+=", road_"+road+"_allroad_weather_count_"+type+".allroad_weather_"+str(w)+"_percent"
 			oneroad_weather_select+=", road_"+road+"_oneroad_weather_count_"+type+".oneroad_weather_"+str(w)
-			allroad_weather_select+=", road_"+road+"_oneroad_weather_count_"+type+".oneroad_weather_"+str(w)+"_percent"
+			oneroad_weather_select+=", road_"+road+"_oneroad_weather_count_"+type+".oneroad_weather_"+str(w)+"_percent"
 			w+=1
 
 
@@ -648,22 +648,22 @@ class Sql_creation(object):
 def get_test_data():
 	#roads=['12','15','2','8','10','4','7']
 	roads=['21','13','16','19','6','9','11']#
-	base_day='20141225'
-	#正例集
-	base_day1='20141225'
-	base_day2='20141231'
-	#所有用户集
-	base_day3='20140801'
-	base_day4='20141225'
-	#roads=['4']
-
-	# base_day='20141218'
+	# base_day='20141225'
 	# #正例集
-	# base_day1='20141218'
-	# base_day2='20141224'
+	# base_day1='20141225'
+	# base_day2='20141231'
 	# #所有用户集
 	# base_day3='20140801'
-	# base_day4='20141218'
+	# base_day4='20141225'
+	#roads=['4']
+
+	base_day='20141220'
+	#正例集
+	base_day1='20141220'
+	base_day2='20141226'
+	#所有用户集
+	base_day3='20140801'
+	base_day4='20141220'
 
 	# base_day='20141211'
 	# #正例集
@@ -673,13 +673,13 @@ def get_test_data():
 	# base_day3='20140801'
 	# base_day4='20141211'
 	sql_instance=Sql_creation(base_day)
-	start_day='2014110105'
+	start_day='2014080105'
 	end_day='2015010105'
-	base_len=30
+	base_len=120
 	sql_instance.split_road_data(start_day,end_day,base_len)
 
 	for road in roads:
-		get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,'test_2month')
+		get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,'test_point2_365')
 
 def get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,type):
 	sql_instance=Sql_creation(base_day)
@@ -738,7 +738,7 @@ def _get_predict_data(base_day,road):
 	sql_instance=Sql_creation(base_day)
 	sql_arr=[]
 	#计算不同路的用户最近1-60天的乘坐次数
-	type='predict_2month'
+	type='predict_point2_365'
 	sql_arr.append(sql_instance.last_recent_day_count_sql(road,type))
 	#two times
 	sql_arr.append(sql_instance.count_beyond_two_times_sql(road,type))
@@ -769,7 +769,7 @@ def _get_predict_data(base_day,road):
 	#type
 	sql_arr.append(sql_instance.type_sql(road,type))
 	#合并为一个表
-	sql_arr.append(sql_instance.coumun_concat_sql_predict(road,'predict_2month'))
+	sql_arr.append(sql_instance.coumun_concat_sql_predict(road,'predict_point2_365'))
 	f=file(u'sql/road_'+road+'_'+type+'_data_sql.txt','wb')
 	for sql in sql_arr:
 		f.write(sql+'\n')

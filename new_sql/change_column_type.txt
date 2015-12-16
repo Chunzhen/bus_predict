@@ -1,0 +1,7 @@
+create table local_data_road_21 as select *,cast(label as int) as label2 from local_data_21;
+create table local_data_road_13 as select *,cast(label as int) as label2 from local_data_13;
+create table local_data_road_16 as select *,cast(label as int) as label2 from local_data_16;
+create table local_data_road_19 as select *,cast(label as int) as label2 from local_data_19;
+create table local_data_road_6 as select *,cast(label as int) as label2 from local_data_6;
+create table local_data_road_9 as select *,cast(label as int) as label2 from local_data_9;
+create table local_data_road_11 as select *,cast(label as int) as label2 from local_data_11;

@@ -1,0 +1,21 @@
+drop table if exists create_city_table; create table create_city_table as select t2.create_city,t2.create_city_key , case when t2.create_city_key=1 then 1 else 0 end as create_city_col_1
+, case when t2.create_city_key=2 then 1 else 0 end as create_city_col_2
+, case when t2.create_city_key=3 then 1 else 0 end as create_city_col_3
+, case when t2.create_city_key=4 then 1 else 0 end as create_city_col_4
+, case when t2.create_city_key=5 then 1 else 0 end as create_city_col_5
+, case when t2.create_city_key=6 then 1 else 0 end as create_city_col_6
+, case when t2.create_city_key=7 then 1 else 0 end as create_city_col_7
+, case when t2.create_city_key=8 then 1 else 0 end as create_city_col_8
+, case when t2.create_city_key=9 then 1 else 0 end as create_city_col_9
+, case when t2.create_city_key=10 then 1 else 0 end as create_city_col_10
+, case when t2.create_city_key=11 then 1 else 0 end as create_city_col_11
+, case when t2.create_city_key=12 then 1 else 0 end as create_city_col_12
+, case when t2.create_city_key=13 then 1 else 0 end as create_city_col_13
+, case when t2.create_city_key=14 then 1 else 0 end as create_city_col_14
+, case when t2.create_city_key=15 then 1 else 0 end as create_city_col_15
+, case when t2.create_city_key=16 then 1 else 0 end as create_city_col_16
+, case when t2.create_city_key=17 then 1 else 0 end as create_city_col_17
+, case when t2.create_city_key=18 then 1 else 0 end as create_city_col_18
+, case when t2.create_city_key=19 then 1 else 0 end as create_city_col_19
+, case when t2.create_city_key=20 then 1 else 0 end as create_city_col_20
+from (select create_city,row_number() over(partition by num order by num desc) as create_city_key from (select create_city,length('abc') as num from tianchi_gd.p2_gd_train_data group by create_city)t)t2;

@@ -1,0 +1,114 @@
+drop table if exists user_count_predayk_road_19_new_predict; create table user_count_predayk_road_19_new_predict as select 
+a.card_id, day_count_1, (cast(day_count_1 as double) / cast(day_count_200 as double)) as day_count_percent_1, day_count_2, (cast(day_count_2 as double) / cast(day_count_200 as double)) as day_count_percent_2, day_count_3, (cast(day_count_3 as double) / cast(day_count_200 as double)) as day_count_percent_3, day_count_4, (cast(day_count_4 as double) / cast(day_count_200 as double)) as day_count_percent_4, day_count_5, (cast(day_count_5 as double) / cast(day_count_200 as double)) as day_count_percent_5, day_count_6, (cast(day_count_6 as double) / cast(day_count_200 as double)) as day_count_percent_6, day_count_7, (cast(day_count_7 as double) / cast(day_count_200 as double)) as day_count_percent_7, day_count_14, (cast(day_count_14 as double) / cast(day_count_200 as double)) as day_count_percent_14, day_count_21, (cast(day_count_21 as double) / cast(day_count_200 as double)) as day_count_percent_21, day_count_28, (cast(day_count_28 as double) / cast(day_count_200 as double)) as day_count_percent_28, day_count_365
+ from 
+(select card_id from gd_train_data_19 where deal_time<'2015010105' group by card_id) a 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_1 from gd_train_data_19 where deal_time>='2014123105' and deal_time<'2015010105' group by Card_id) table_day_count_1 on a.card_id=table_day_count_1.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_2 from gd_train_data_19 where deal_time>='2014123005' and deal_time<'2015010105' group by Card_id) table_day_count_2 on a.card_id=table_day_count_2.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_3 from gd_train_data_19 where deal_time>='2014122905' and deal_time<'2015010105' group by Card_id) table_day_count_3 on a.card_id=table_day_count_3.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_4 from gd_train_data_19 where deal_time>='2014122805' and deal_time<'2015010105' group by Card_id) table_day_count_4 on a.card_id=table_day_count_4.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_5 from gd_train_data_19 where deal_time>='2014122705' and deal_time<'2015010105' group by Card_id) table_day_count_5 on a.card_id=table_day_count_5.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_6 from gd_train_data_19 where deal_time>='2014122605' and deal_time<'2015010105' group by Card_id) table_day_count_6 on a.card_id=table_day_count_6.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_7 from gd_train_data_19 where deal_time>='2014122505' and deal_time<'2015010105' group by Card_id) table_day_count_7 on a.card_id=table_day_count_7.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_14 from gd_train_data_19 where deal_time>='2014121805' and deal_time<'2015010105' group by Card_id) table_day_count_14 on a.card_id=table_day_count_14.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_21 from gd_train_data_19 where deal_time>='2014121105' and deal_time<'2015010105' group by Card_id) table_day_count_21 on a.card_id=table_day_count_21.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_28 from gd_train_data_19 where deal_time>='2014120405' and deal_time<'2015010105' group by Card_id) table_day_count_28 on a.card_id=table_day_count_28.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_365 from gd_train_data_19 where deal_time>='2014010105' and deal_time<'2015010105' group by Card_id) table_day_count_365 on a.card_id=table_day_count_365.card_id 
+;
+
+
+drop table if exists user_count_preweather_road_19_new_predict; create table user_count_preweather_road_19_new_predict as select 
+a.card_id , oneroad_weather_0 , oneroad_weather_0/oneroad_weather_all as oneroad_weather_0_percent, oneroad_weather_1 , oneroad_weather_1/oneroad_weather_all as oneroad_weather_1_percent, oneroad_weather_2 , oneroad_weather_2/oneroad_weather_all as oneroad_weather_2_percent, oneroad_weather_3 , oneroad_weather_3/oneroad_weather_all as oneroad_weather_3_percent, oneroad_weather_4 , oneroad_weather_4/oneroad_weather_all as oneroad_weather_4_percent, oneroad_weather_5 , oneroad_weather_5/oneroad_weather_all as oneroad_weather_5_percent, oneroad_weather_6 , oneroad_weather_6/oneroad_weather_all as oneroad_weather_6_percent, oneroad_weather_7 , oneroad_weather_7/oneroad_weather_all as oneroad_weather_7_percent, oneroad_weather_8 , oneroad_weather_8/oneroad_weather_all as oneroad_weather_8_percent, oneroad_weather_9 , oneroad_weather_9/oneroad_weather_all as oneroad_weather_9_percent, oneroad_weather_10 , oneroad_weather_10/oneroad_weather_all as oneroad_weather_10_percent, oneroad_weather_11 , oneroad_weather_11/oneroad_weather_all as oneroad_weather_11_percent
+ from 
+(select card_id from gd_train_data_19 where deal_time<'2015010105' group by card_id) a 
+ left outer join (select card_id,count(*) as oneroad_weather_0 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_0) group by card_id) t_0 on a.card_id=t_0.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_1 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_1) group by card_id) t_1 on a.card_id=t_1.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_2 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_2) group by card_id) t_2 on a.card_id=t_2.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_3 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_3) group by card_id) t_3 on a.card_id=t_3.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_4 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_4) group by card_id) t_4 on a.card_id=t_4.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_5 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_5) group by card_id) t_5 on a.card_id=t_5.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_6 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_6) group by card_id) t_6 on a.card_id=t_6.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_7 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_7) group by card_id) t_7 on a.card_id=t_7.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_8 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_8) group by card_id) t_8 on a.card_id=t_8.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_9 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_9) group by card_id) t_9 on a.card_id=t_9.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_10 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_10) group by card_id) t_10 on a.card_id=t_10.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_11 from gd_train_data_19 where deal_time<'20150101' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_11) group by card_id) t_11 on a.card_id=t_11.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_all from gd_train_data_19 where deal_time<'20150101' group by card_id) ta on ta.card_id=a.card_id;
+
+
+drop table if exists user_count_preweekly_road_19_7_new_predict; create table user_count_preweekly_road_19_7_new_predict as select 
+a.card_id , level_7_0, level_7_1,case when level_7_1=1 and level_7_0=1 then 1 else 0 end as continue_2week_1, level_7_2,case when level_7_2=1 and level_7_1=1 then 1 else 0 end as continue_2week_2, level_7_3,case when level_7_3=1 and level_7_2=1 then 1 else 0 end as continue_2week_3, level_7_4,case when level_7_4=1 and level_7_3=1 then 1 else 0 end as continue_2week_4, level_7_5,case when level_7_5=1 and level_7_4=1 then 1 else 0 end as continue_2week_5, level_7_6,case when level_7_6=1 and level_7_5=1 then 1 else 0 end as continue_2week_6, level_7_7,case when level_7_7=1 and level_7_6=1 then 1 else 0 end as continue_2week_7, level_7_8,case when level_7_8=1 and level_7_7=1 then 1 else 0 end as continue_2week_8, level_7_9,case when level_7_9=1 and level_7_8=1 then 1 else 0 end as continue_2week_9, level_7_10,case when level_7_10=1 and level_7_9=1 then 1 else 0 end as continue_2week_10, level_7_11,case when level_7_11=1 and level_7_10=1 then 1 else 0 end as continue_2week_11, level_7_12,case when level_7_12=1 and level_7_11=1 then 1 else 0 end as continue_2week_12, level_7_13,case when level_7_13=1 and level_7_12=1 then 1 else 0 end as continue_2week_13, level_7_14,case when level_7_14=1 and level_7_13=1 then 1 else 0 end as continue_2week_14
+ from 
+(select card_id from gd_train_data_19 where deal_time<'2015010105' group by card_id) a 
+left outer join (select card_id, count(*) as level_7_0 ,cast(sign(count(*)) as int) as level_7_0_bool from gd_train_data_19 where deal_time>='2014122505' and deal_time<'2015010105' group by card_id) table_level_7_0 on a.card_id=table_level_7_0.card_id 
+left outer join (select card_id, count(*) as level_7_1 ,cast(sign(count(*)) as int) as level_7_1_bool from gd_train_data_19 where deal_time>='2014121805' and deal_time<'2014122505' group by card_id) table_level_7_1 on a.card_id=table_level_7_1.card_id 
+left outer join (select card_id, count(*) as level_7_2 ,cast(sign(count(*)) as int) as level_7_2_bool from gd_train_data_19 where deal_time>='2014121105' and deal_time<'2014121805' group by card_id) table_level_7_2 on a.card_id=table_level_7_2.card_id 
+left outer join (select card_id, count(*) as level_7_3 ,cast(sign(count(*)) as int) as level_7_3_bool from gd_train_data_19 where deal_time>='2014120405' and deal_time<'2014121105' group by card_id) table_level_7_3 on a.card_id=table_level_7_3.card_id 
+left outer join (select card_id, count(*) as level_7_4 ,cast(sign(count(*)) as int) as level_7_4_bool from gd_train_data_19 where deal_time>='2014112705' and deal_time<'2014120405' group by card_id) table_level_7_4 on a.card_id=table_level_7_4.card_id 
+left outer join (select card_id, count(*) as level_7_5 ,cast(sign(count(*)) as int) as level_7_5_bool from gd_train_data_19 where deal_time>='2014112005' and deal_time<'2014112705' group by card_id) table_level_7_5 on a.card_id=table_level_7_5.card_id 
+left outer join (select card_id, count(*) as level_7_6 ,cast(sign(count(*)) as int) as level_7_6_bool from gd_train_data_19 where deal_time>='2014111305' and deal_time<'2014112005' group by card_id) table_level_7_6 on a.card_id=table_level_7_6.card_id 
+left outer join (select card_id, count(*) as level_7_7 ,cast(sign(count(*)) as int) as level_7_7_bool from gd_train_data_19 where deal_time>='2014110605' and deal_time<'2014111305' group by card_id) table_level_7_7 on a.card_id=table_level_7_7.card_id 
+left outer join (select card_id, count(*) as level_7_8 ,cast(sign(count(*)) as int) as level_7_8_bool from gd_train_data_19 where deal_time>='2014103005' and deal_time<'2014110605' group by card_id) table_level_7_8 on a.card_id=table_level_7_8.card_id 
+left outer join (select card_id, count(*) as level_7_9 ,cast(sign(count(*)) as int) as level_7_9_bool from gd_train_data_19 where deal_time>='2014102305' and deal_time<'2014103005' group by card_id) table_level_7_9 on a.card_id=table_level_7_9.card_id 
+left outer join (select card_id, count(*) as level_7_10 ,cast(sign(count(*)) as int) as level_7_10_bool from gd_train_data_19 where deal_time>='2014101605' and deal_time<'2014102305' group by card_id) table_level_7_10 on a.card_id=table_level_7_10.card_id 
+left outer join (select card_id, count(*) as level_7_11 ,cast(sign(count(*)) as int) as level_7_11_bool from gd_train_data_19 where deal_time>='2014100905' and deal_time<'2014101605' group by card_id) table_level_7_11 on a.card_id=table_level_7_11.card_id 
+left outer join (select card_id, count(*) as level_7_12 ,cast(sign(count(*)) as int) as level_7_12_bool from gd_train_data_19 where deal_time>='2014100205' and deal_time<'2014100905' group by card_id) table_level_7_12 on a.card_id=table_level_7_12.card_id 
+left outer join (select card_id, count(*) as level_7_13 ,cast(sign(count(*)) as int) as level_7_13_bool from gd_train_data_19 where deal_time>='2014092505' and deal_time<'2014100205' group by card_id) table_level_7_13 on a.card_id=table_level_7_13.card_id 
+left outer join (select card_id, count(*) as level_7_14 ,cast(sign(count(*)) as int) as level_7_14_bool from gd_train_data_19 where deal_time>='2014091805' and deal_time<'2014092505' group by card_id) table_level_7_14 on a.card_id=table_level_7_14.card_id 
+;
+
+
+drop table if exists user_first_last_road_19_new_predict; create table user_first_last_road_19_new_predict as select 
+ a.card_id,last_visit,first_visit,(first_visit-last_visit) as visit_range 
+,(first_visit-last_visit)%2 as first_end_col_0 
+,case when (first_visit-last_visit) in (2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31, 34, 35, 38, 39, 42, 43, 46, 47, 50, 51, 54, 55, 58, 59, 62, 63, 66, 67, 70, 71, 74, 75, 78, 79, 82, 83, 86, 87, 90, 91, 94, 95, 98, 99, 102, 103, 106, 107, 110, 111, 114, 115, 118, 119, 122, 123, 126, 127) then 1 else 0 end as first_end_col_1 
+,case when (first_visit-last_visit) in (4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 23, 28, 29, 30, 31, 36, 37, 38, 39, 44, 45, 46, 47, 52, 53, 54, 55, 60, 61, 62, 63, 68, 69, 70, 71, 76, 77, 78, 79, 84, 85, 86, 87, 92, 93, 94, 95, 100, 101, 102, 103, 108, 109, 110, 111, 116, 117, 118, 119, 124, 125, 126, 127) then 1 else 0 end as first_end_col_2 
+,case when (first_visit-last_visit) in (8, 9, 10, 11, 12, 13, 14, 15, 24, 25, 26, 27, 28, 29, 30, 31, 40, 41, 42, 43, 44, 45, 46, 47, 56, 57, 58, 59, 60, 61, 62, 63, 72, 73, 74, 75, 76, 77, 78, 79, 88, 89, 90, 91, 92, 93, 94, 95, 104, 105, 106, 107, 108, 109, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127) then 1 else 0 end as first_end_col_3 
+,case when (first_visit-last_visit) in (16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127) then 1 else 0 end as first_end_col_4 
+,case when (first_visit-last_visit) in (32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127) then 1 else 0 end as first_end_col_5 
+,case when (first_visit-last_visit)>63 then 1 else 0 end as first_end_col_6,(last_2_visit-last_visit) as visit_range2 
+,(last_2_visit-last_visit)%2 as pre_end_col_0 
+,case when (last_2_visit-last_visit) in (2, 3, 6, 7, 10, 11, 14, 15, 18, 19, 22, 23, 26, 27, 30, 31, 34, 35, 38, 39, 42, 43, 46, 47, 50, 51, 54, 55, 58, 59, 62, 63, 66, 67, 70, 71, 74, 75, 78, 79, 82, 83, 86, 87, 90, 91, 94, 95, 98, 99, 102, 103, 106, 107, 110, 111, 114, 115, 118, 119, 122, 123, 126, 127) then 1 else 0 end as pre_end_col_1 
+,case when (last_2_visit-last_visit) in (4, 5, 6, 7, 12, 13, 14, 15, 20, 21, 22, 23, 28, 29, 30, 31, 36, 37, 38, 39, 44, 45, 46, 47, 52, 53, 54, 55, 60, 61, 62, 63, 68, 69, 70, 71, 76, 77, 78, 79, 84, 85, 86, 87, 92, 93, 94, 95, 100, 101, 102, 103, 108, 109, 110, 111, 116, 117, 118, 119, 124, 125, 126, 127) then 1 else 0 end as pre_end_col_2 
+,case when (last_2_visit-last_visit) in (8, 9, 10, 11, 12, 13, 14, 15, 24, 25, 26, 27, 28, 29, 30, 31, 40, 41, 42, 43, 44, 45, 46, 47, 56, 57, 58, 59, 60, 61, 62, 63, 72, 73, 74, 75, 76, 77, 78, 79, 88, 89, 90, 91, 92, 93, 94, 95, 104, 105, 106, 107, 108, 109, 110, 111, 120, 121, 122, 123, 124, 125, 126, 127) then 1 else 0 end as pre_end_col_3 
+,case when (last_2_visit-last_visit) in (16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127) then 1 else 0 end as pre_end_col_4 
+,case when (last_2_visit-last_visit) in (32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127) then 1 else 0 end as pre_end_col_5 
+,case when (last_2_visit-last_visit)>63 then 1 else 0 end as pre_end_col_6
+ from 
+(select card_id from gd_train_data_19 where deal_time<'2015010105' group by card_id) a 
+left outer join (select t1.card_id,cast((1420041600 - unix_timestamp(to_date(t1.deal_time,'yyyymmddhh')))/86400 as int) as last_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data_19 where deal_time<'20150101') t1 where t1.rank=1 ) table_last on a.card_id=table_last.card_id 
+left outer join (select t2.card_id,cast((1420041600 - unix_timestamp(to_date(t2.deal_time,'yyyymmddhh')))/86400 as int) as first_visit  from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time asc) as rank from gd_train_data_19 where deal_time<'20150101') t2 where t2.rank=1 ) table_first on a.card_id=table_first.card_id 
+left outer join (select t3.card_id,cast((1420041600 - unix_timestamp(to_date(t3.deal_time,'yyyymmddhh')))/86400 as int) as last_2_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data_19 where deal_time<'20150101') t3 where t3.rank=2 ) table_last_2 on a.card_id=table_last_2.card_id 
+;
+
+
+drop table if exists user_type_road_19_new_predict; create table user_type_road_19_new_predict as select t.* from 
+(select a.card_id,b.*,c.*,row_number() over(partition by a.card_id order by a.card_type desc) as rank from 
+(select card_id,card_type,create_city from gd_train_data_19 where deal_time<'2015010105') a left outer join 
+ (select * from card_type_table) b on a.card_type=b.card_type left outer join 
+ (select * from create_city_table) c on a.create_city=c.create_city ) t where t.rank=1; 
+
+alter table user_count_preweather_road_19_new_predict change column card_id rename to card_id1;
+alter table user_count_preweekly_road_19_7_new_predict change column card_id rename to card_id2;
+alter table user_first_last_road_19_new_predict change column card_id rename to card_id3;
+alter table user_type_road_19_new_predict change column card_id rename to card_id4;
+drop table if exists new_predict_19; create table new_predict_19 as select 
+user_count_predayk_road_19_new_predict.* ,user_count_preweather_road_19_new_predict.* ,user_count_preweekly_road_19_7_new_predict.* ,user_first_last_road_19_new_predict.* ,user_type_road_19_new_predict.* 
+ from 
+user_count_predayk_road_19_new_predict left outer join user_count_preweather_road_19_new_predict on user_count_predayk_road_19_new_predict.card_id=user_count_preweather_road_19_new_predict.card_id1
+left outer join user_count_preweekly_road_19_7_new_predict on user_count_predayk_road_19_new_predict.card_id=user_count_preweekly_road_19_7_new_predict.card_id2
+left outer join user_first_last_road_19_new_predict on user_count_predayk_road_19_new_predict.card_id=user_first_last_road_19_new_predict.card_id3
+left outer join user_type_road_19_new_predict on user_count_predayk_road_19_new_predict.card_id=user_type_road_19_new_predict.card_id4
+;
+

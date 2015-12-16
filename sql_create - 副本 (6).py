@@ -41,6 +41,7 @@ class Sql_creation(object):
 		#f.write(sql)
 		return sql
 
+
 	#用户距离截止时间的前（1/2/3/4/5/6/7/10/15/30/60/全部 ）乘坐车的次数
 	#用户在前1天，前5天，前7天，前30天乘车次数占全部乘车次数的比例
 	def last_recent_day_count_sql(self,road,type):
@@ -87,7 +88,7 @@ class Sql_creation(object):
 		for i in range(r):
 			index=i*int(level);
 			timestamp1=timestamp-86400*index;
-			timestamp2=timestamp1-86400*int(level)
+			timestamp2=timestamp1-86400*2;
 			d=datetime.fromtimestamp(float(timestamp1))
 			dStr1=str(d.year)+self.add_zero(d.month)+self.add_zero(d.day)+'05'
 			d=datetime.fromtimestamp(float(timestamp2))
@@ -99,7 +100,6 @@ class Sql_creation(object):
 		sql+=inner_select+"\n from \n"+inner_sql+";\n"
 		#f.write(sql)
 		return sql+"\n"
-
 
 	#用户第一次与最后一次乘车时间，第一次与最后一次乘车时间的差值，最后一次与最后第二次的差值
 	def first_last_sql(self,road,type):
@@ -122,7 +122,7 @@ class Sql_creation(object):
 		#f.write(sql)
 		return sql+"\n"
 
-	#用户所有路的第一次与最后一次乘车时间，第一次与最后一次乘车时间的差值，最后一次与最后第二次的差值
+	#用户所有路的第一次与最后一次乘车时间，第一次与最后一次乘车时间的差值，最后一次与最后第二次的差值 ？？？可能计算有些问题
 	def allroad_first_last_sql(self,road,type):
 		base_day=self.__base_day
 		recent_day=self.__recent_day
@@ -638,7 +638,7 @@ class Sql_creation(object):
 
 	def create_city(self):
 		sql="drop table if exists create_city_table; "
-		sql+="create table create_city_table as select create_city,row_number() over(partition by num order by num desc) as create_city_key from (select create_city,length('abc') as num from tianchi_gd.gd_train_data group by create_city)t"
+		sql+="create table create_city_table as select create_city,row_number() over(partition by num order by num desc) as create_city_key from (select create_city,length(create_city) as num from tianchi_gd.gd_train_data group by create_city)t"
 
 	def card_type(self):
 		sql="drop table if exists card_type_table;"
@@ -649,23 +649,23 @@ def get_test_data():
 	#roads=['12','15','2','8','10','4','7']
 	roads=['21','13','16','19','6','9','11']#
 	#截点类型1
-	base_day='20141225'
-	#正例集
-	base_day1='20141225'
-	base_day2='20141231'
-	#所有用户集
-	base_day3='20140801'
-	base_day4='20141225'
+	# base_day='20141225'
+	# #正例集
+	# base_day1='20141225'
+	# base_day2='20141231'
+	# #所有用户集
+	# base_day3='20140801'
+	# base_day4='20141225'
 	#roads=['4']
 
 	#截点类型2
-	# base_day='20141220'
-	# #正例集
-	# base_day1='20141220'
-	# base_day2='20141226'
-	# #所有用户集
-	# base_day3='20140801'
-	# base_day4='20141220'
+	base_day='20141220'
+	#正例集
+	base_day1='20141220'
+	base_day2='20141226'
+	#所有用户集
+	base_day3='20140801'
+	base_day4='20141220'
 
 	#截点类型1
 	# base_day='20141211'
@@ -676,13 +676,13 @@ def get_test_data():
 	# base_day3='20140801'
 	# base_day4='20141211'
 	sql_instance=Sql_creation(base_day)
-	start_day='2014080105'
+	start_day='2014112605'
 	end_day='2015010105'
 	base_len=120
 	sql_instance.split_road_data(start_day,end_day,base_len)
 
 	for road in roads:
-		get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,'old_test')
+		get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,'test_1month_point2')
 
 def get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,type):
 	sql_instance=Sql_creation(base_day)
@@ -694,12 +694,14 @@ def get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,type):
 	sql_arr.append(sql_instance.count_beyond_two_times_sql(road,type))
 	#weekday weeken
 	sql_arr.append(sql_instance.weekday_weekend_count_sql(road,type))	
+	#hour
+	#sql_arr.append(sql_instance.hour_count_sql(road,type))	
 	#level 
 	levels_dict={'2':14,'3':15,'7':10,'14':6,'21':4,'28':3}
 	for k,v in levels_dict.items():
 		sql_arr.append(sql_instance.level_sql(road,k,v,type))
 
-	##first last
+	#first last
 	sql_arr.append(sql_instance.first_last_sql(road,type))	
 
 	#allroad first last
@@ -729,9 +731,9 @@ def get_data(base_day,road,base_day1,base_day2,base_day3,base_day4,type):
 def get_predict_data():
 	#roads=['12','15','2','8','10','4','7'] 
 	roads=['21','13','16','19','6','9','11']
-	sql_instance=Sql_creation('20141218')
+	sql_instance=Sql_creation('20150101')
 	for x in roads:
-		_get_predict_data('20141218',x)
+		_get_predict_data('20150101',x)
 
 def _get_predict_data(base_day,road):
 	#base_day='20141231'
@@ -739,12 +741,14 @@ def _get_predict_data(base_day,road):
 	sql_instance=Sql_creation(base_day)
 	sql_arr=[]
 	#计算不同路的用户最近1-60天的乘坐次数
-	type='naive_predict'
+	type='predict_point2_365'
 	sql_arr.append(sql_instance.last_recent_day_count_sql(road,type))
 	#two times
 	sql_arr.append(sql_instance.count_beyond_two_times_sql(road,type))
 	#weekday weeken
 	sql_arr.append(sql_instance.weekday_weekend_count_sql(road,type))
+	#hour
+	#sql_arr.append(sql_instance.hour_count_sql(road,type))	
 	#level 
 	levels_dict={'2':14,'3':15,'7':10,'14':6,'21':4,'28':3}
 	for k,v in levels_dict.items():
@@ -765,17 +769,17 @@ def _get_predict_data(base_day,road):
 	#oneroad weather
 	sql_arr.append(sql_instance.oneroad_weather_count_sql(road,type))	
 
-	# #type
+	#type
 	sql_arr.append(sql_instance.type_sql(road,type))
 	#合并为一个表
-	sql_arr.append(sql_instance.coumun_concat_sql_predict(road,'naive_predict'))
+	sql_arr.append(sql_instance.coumun_concat_sql_predict(road,'predict_point2_365'))
 	f=file(u'sql/road_'+road+'_'+type+'_data_sql.txt','wb')
 	for sql in sql_arr:
 		f.write(sql+'\n')
 
 def main():
-	#get_test_data()
-	get_predict_data()
+	get_test_data()
+	#get_predict_data()
 	pass
 
 

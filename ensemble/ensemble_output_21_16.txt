@@ -1,0 +1,34 @@
+drop table if exists ensemble_output_21_16; create table ensemble_output_21_16 as select rf_output_21_1.* , gbdt_output_21_1.prediction_score as score1,gbdt_output_21_1.prediction_result as result1 
+, rf_output_21_2.prediction_score as score2,rf_output_21_2.prediction_result as result2 
+, gbdt_output_21_2.prediction_score as score3,gbdt_output_21_2.prediction_result as result3 
+, rf_output_21_3.prediction_score as score4,rf_output_21_3.prediction_result as result4 
+, gbdt_output_21_3.prediction_score as score5,gbdt_output_21_3.prediction_result as result5 
+, rf_output_21_4.prediction_score as score6,rf_output_21_4.prediction_result as result6 
+, gbdt_output_21_4.prediction_score as score7,gbdt_output_21_4.prediction_result as result7 
+, rf_output_21_5.prediction_score as score8,rf_output_21_5.prediction_result as result8 
+, gbdt_output_21_5.prediction_score as score9,gbdt_output_21_5.prediction_result as result9 
+, rf_output_21_6.prediction_score as score10,rf_output_21_6.prediction_result as result10 
+, gbdt_output_21_6.prediction_score as score11,gbdt_output_21_6.prediction_result as result11 
+, rf_output_21_7.prediction_score as score12,rf_output_21_7.prediction_result as result12 
+, gbdt_output_21_7.prediction_score as score13,gbdt_output_21_7.prediction_result as result13 
+, rf_output_21_8.prediction_score as score14,rf_output_21_8.prediction_result as result14 
+, gbdt_output_21_8.prediction_score as score15,gbdt_output_21_8.prediction_result as result15 
+ from  rf_output_21_1 left outer join gbdt_output_21_1 on rf_output_21_1.card_id=gbdt_output_21_1.card_id 
+ left outer join rf_output_21_2 on rf_output_21_1.card_id=rf_output_21_2.card_id 
+ left outer join gbdt_output_21_2 on rf_output_21_1.card_id=gbdt_output_21_2.card_id 
+ left outer join rf_output_21_3 on rf_output_21_1.card_id=rf_output_21_3.card_id 
+ left outer join gbdt_output_21_3 on rf_output_21_1.card_id=gbdt_output_21_3.card_id 
+ left outer join rf_output_21_4 on rf_output_21_1.card_id=rf_output_21_4.card_id 
+ left outer join gbdt_output_21_4 on rf_output_21_1.card_id=gbdt_output_21_4.card_id 
+ left outer join rf_output_21_5 on rf_output_21_1.card_id=rf_output_21_5.card_id 
+ left outer join gbdt_output_21_5 on rf_output_21_1.card_id=gbdt_output_21_5.card_id 
+ left outer join rf_output_21_6 on rf_output_21_1.card_id=rf_output_21_6.card_id 
+ left outer join gbdt_output_21_6 on rf_output_21_1.card_id=gbdt_output_21_6.card_id 
+ left outer join rf_output_21_7 on rf_output_21_1.card_id=rf_output_21_7.card_id 
+ left outer join gbdt_output_21_7 on rf_output_21_1.card_id=gbdt_output_21_7.card_id 
+ left outer join rf_output_21_8 on rf_output_21_1.card_id=rf_output_21_8.card_id 
+ left outer join gbdt_output_21_8 on rf_output_21_1.card_id=gbdt_output_21_8.card_id 
+;
+alter table ensemble_output_21_16 change column prediction_score rename to score0;
+alter table ensemble_output_21_16 change column prediction_detail rename to detail0;
+alter table ensemble_output_21_16 change column prediction_result rename to result0;

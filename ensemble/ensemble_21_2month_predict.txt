@@ -1,0 +1,10 @@
+drop table if exists ensemble_predict_21; create table ensemble_predict_21 as select lr_predict_21.* , svm_predict_21.prediction_score as score1,svm_predict_21.prediction_result as result1 
+, rf_predict_21.prediction_score as score2,rf_predict_21.prediction_result as result2 
+, gbdt_predict_21.prediction_score as score3,gbdt_predict_21.prediction_result as result3 
+ from  lr_predict_21 left outer join svm_predict_21 on lr_predict_21.card_id=svm_predict_21.card_id 
+ left outer join rf_predict_21 on lr_predict_21.card_id=rf_predict_21.card_id 
+ left outer join gbdt_predict_21 on lr_predict_21.card_id=gbdt_predict_21.card_id 
+;
+alter table ensemble_predict_21 change column prediction_score rename to score0;
+alter table ensemble_predict_21 change column prediction_detail rename to detail0;
+alter table ensemble_predict_21 change column prediction_result rename to result0;

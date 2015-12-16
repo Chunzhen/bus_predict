@@ -1,0 +1,22 @@
+drop table if exists weather_feature; create table weather_feature as select w.deal_time2, case when weekday(w.date_time2)=0 then 1 else 0 end as weekday_col0
+, case when weekday(w.date_time2)=1 then 1 else 0 end as weekday_col1
+, case when weekday(w.date_time2)=2 then 1 else 0 end as weekday_col2
+, case when weekday(w.date_time2)=3 then 1 else 0 end as weekday_col3
+, case when weekday(w.date_time2)=4 then 1 else 0 end as weekday_col4
+, case when weekday(w.date_time2)=5 then 1 else 0 end as weekday_col5
+, case when weekday(w.date_time2)=6 then 1 else 0 end as weekday_col6
+,case when w.weather like '%晴%' then 1 else 0 end as weather_col0 
+,case when w.weather like '%雷阵雨%' then 1 else 0 end as weather_col1 
+,case when w.weather like '%多云%' then 1 else 0 end as weather_col2 
+,case when w.weather like '%大雨%' then 1 else 0 end as weather_col3 
+,case when w.weather like '%中到大雨%' then 1 else 0 end as weather_col4 
+,case when w.weather like '%大到暴雨%' then 1 else 0 end as weather_col5 
+,case when w.weather like '%阵雨%' then 1 else 0 end as weather_col6 
+,case when w.weather like '%中雨%' then 1 else 0 end as weather_col7 
+,case when w.weather like '%阴%' then 1 else 0 end as weather_col8 
+,case when w.weather like '%小雨%' then 1 else 0 end as weather_col9 
+,case when w.weather like '%小到中雨%' then 1 else 0 end as weather_col10 
+,case when w.weather like '%霾%' then 1 else 0 end as weather_col11 
+,case when weekday(w.date_time2)>=5 or (w.date_time2>='2015/1/1' and w.date_time2<='2015/1/3') then 1 else 0 end as weekend_col 
+,case when weekday(w.date_time2)<5 or (w.date_time2='2015/1/4') then 1 else 0 end as workday_col 
+ from (select *,to_date(concat(split_part(date_time,'/',1),cast(cast(cast(split_part(date_time,'/',2) as int)/10 as int) as string),cast(cast(cast(split_part(date_time,'/',2) as int)%10 as int) as string),cast(cast(cast(split_part(date_time,'/',3) as int)/10 as int) as string),cast(cast(cast(split_part(date_time,'/',3) as int)%10 as int) as string) ), 'yyyymmdd') as date_time2 from tianchi_gd.gd_weather_report)w;

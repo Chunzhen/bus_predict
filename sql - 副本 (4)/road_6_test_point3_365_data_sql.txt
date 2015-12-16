@@ -1,0 +1,290 @@
+drop table if exists recent_day_count_road_6_test_point3_365; create table recent_day_count_road_6_test_point3_365 as select 
+a.card_id, day_count_1, (cast(day_count_1 as double) / cast(day_count_365 as double)) as day_count_percent_1, day_count_2, (cast(day_count_2 as double) / cast(day_count_365 as double)) as day_count_percent_2, day_count_3, (cast(day_count_3 as double) / cast(day_count_365 as double)) as day_count_percent_3, day_count_4, (cast(day_count_4 as double) / cast(day_count_365 as double)) as day_count_percent_4, day_count_5, (cast(day_count_5 as double) / cast(day_count_365 as double)) as day_count_percent_5, day_count_6, (cast(day_count_6 as double) / cast(day_count_365 as double)) as day_count_percent_6, day_count_7, (cast(day_count_7 as double) / cast(day_count_365 as double)) as day_count_percent_7, day_count_14, (cast(day_count_14 as double) / cast(day_count_365 as double)) as day_count_percent_14, day_count_21, (cast(day_count_21 as double) / cast(day_count_365 as double)) as day_count_percent_21, day_count_28, (cast(day_count_28 as double) / cast(day_count_365 as double)) as day_count_percent_28, day_count_60, (cast(day_count_60 as double) / cast(day_count_365 as double)) as day_count_percent_60, day_count_365
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_1 from gd_train_data_6 where deal_time>='2014121005' and deal_time<'2014121105' group by Card_id) table_day_count_1 on a.card_id=table_day_count_1.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_2 from gd_train_data_6 where deal_time>='2014120905' and deal_time<'2014121105' group by Card_id) table_day_count_2 on a.card_id=table_day_count_2.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_3 from gd_train_data_6 where deal_time>='2014120805' and deal_time<'2014121105' group by Card_id) table_day_count_3 on a.card_id=table_day_count_3.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_4 from gd_train_data_6 where deal_time>='2014120705' and deal_time<'2014121105' group by Card_id) table_day_count_4 on a.card_id=table_day_count_4.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_5 from gd_train_data_6 where deal_time>='2014120605' and deal_time<'2014121105' group by Card_id) table_day_count_5 on a.card_id=table_day_count_5.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_6 from gd_train_data_6 where deal_time>='2014120505' and deal_time<'2014121105' group by Card_id) table_day_count_6 on a.card_id=table_day_count_6.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_7 from gd_train_data_6 where deal_time>='2014120405' and deal_time<'2014121105' group by Card_id) table_day_count_7 on a.card_id=table_day_count_7.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_14 from gd_train_data_6 where deal_time>='2014112705' and deal_time<'2014121105' group by Card_id) table_day_count_14 on a.card_id=table_day_count_14.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_21 from gd_train_data_6 where deal_time>='2014112005' and deal_time<'2014121105' group by Card_id) table_day_count_21 on a.card_id=table_day_count_21.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_28 from gd_train_data_6 where deal_time>='2014111305' and deal_time<'2014121105' group by Card_id) table_day_count_28 on a.card_id=table_day_count_28.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_60 from gd_train_data_6 where deal_time>='2014101205' and deal_time<'2014121105' group by Card_id) table_day_count_60 on a.card_id=table_day_count_60.card_id 
+left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_365 from gd_train_data_6 where deal_time>='2013121105' and deal_time<'2014121105' group by Card_id) table_day_count_365 on a.card_id=table_day_count_365.card_id 
+;
+
+
+drop table if exists count_beyond_two_times_road_6_test_point3_365; 
+create table count_beyond_two_times_road_6_test_point3_365 as select c.card_id,a_3.beyond_two_count_3,a_7.beyond_two_count_7,a_14.beyond_two_count_14,a_21.beyond_two_count_21,b.beyond_two_count_30 from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) c left outer join
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_3 from gd_train_data_6 where deal_time>='2014120805' and deal_time<'2014121105' group by Card_id) a_3 on c.card_id=a_3.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_7 from gd_train_data_6 where deal_time>='2014120405' and deal_time<'2014121105' group by Card_id) a_7 on c.card_id=a_7.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_14 from gd_train_data_6 where deal_time>='2014112705' and deal_time<'2014121105' group by Card_id) a_14 on c.card_id=a_14.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_21 from gd_train_data_6 where deal_time>='2014112005' and deal_time<'2014121105' group by Card_id) a_21 on c.card_id=a_21.card_id left outer join 
+(select Card_id, (count(*)-count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD')))) as beyond_two_count_30 from gd_train_data_6 where deal_time>='2014111105' and deal_time<'2014121105' group by Card_id) b on c.card_id=b.card_id;
+
+drop table if exists weekday_weekend_count_road_6_test_point3_365;
+ create table weekday_weekend_count_road_6_test_point3_365 as select 
+a.card_id, weekday_1.weekday_count_1, weekend_1.weekend_count_1, cast(weekday_1.weekday_count_1 as double)/cast((weekday_1.weekday_count_1)+(weekend_1.weekend_count_1) as double) as weekday_percent_1, traffic_1.traffic_count_1, cast(traffic_1.traffic_count_1 as double)/cast((weekday_1.weekday_count_1)+(weekend_1.weekend_count_1) as double) as traffic_percent_1 
+, weekday_2.weekday_count_2, weekend_2.weekend_count_2, cast(weekday_2.weekday_count_2 as double)/cast((weekday_2.weekday_count_2)+(weekend_2.weekend_count_2) as double) as weekday_percent_2, traffic_2.traffic_count_2, cast(traffic_2.traffic_count_2 as double)/cast((weekday_2.weekday_count_2)+(weekend_2.weekend_count_2) as double) as traffic_percent_2 
+, weekday_3.weekday_count_3, weekend_3.weekend_count_3, cast(weekday_3.weekday_count_3 as double)/cast((weekday_3.weekday_count_3)+(weekend_3.weekend_count_3) as double) as weekday_percent_3, traffic_3.traffic_count_3, cast(traffic_3.traffic_count_3 as double)/cast((weekday_3.weekday_count_3)+(weekend_3.weekend_count_3) as double) as traffic_percent_3 
+, weekday_4.weekday_count_4, weekend_4.weekend_count_4, cast(weekday_4.weekday_count_4 as double)/cast((weekday_4.weekday_count_4)+(weekend_4.weekend_count_4) as double) as weekday_percent_4, traffic_4.traffic_count_4, cast(traffic_4.traffic_count_4 as double)/cast((weekday_4.weekday_count_4)+(weekend_4.weekend_count_4) as double) as traffic_percent_4 
+ from
+ (select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_1 from gd_train_data_6
+ where deal_time>='2014120405' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_1 on a.card_id=weekday_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_1 from gd_train_data_6
+ where deal_time>='2014120405' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_1 on a.card_id=weekend_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_1 from gd_train_data_6
+ where deal_time>='2014120405' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_1 on a.card_id=traffic_1.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_2 from gd_train_data_6
+ where deal_time>='2014112705' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_2 on a.card_id=weekday_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_2 from gd_train_data_6
+ where deal_time>='2014112705' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_2 on a.card_id=weekend_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_2 from gd_train_data_6
+ where deal_time>='2014112705' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_2 on a.card_id=traffic_2.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_3 from gd_train_data_6
+ where deal_time>='2014112005' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_3 on a.card_id=weekday_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_3 from gd_train_data_6
+ where deal_time>='2014112005' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_3 on a.card_id=weekend_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_3 from gd_train_data_6
+ where deal_time>='2014112005' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_3 on a.card_id=traffic_3.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekday_count_4 from gd_train_data_6
+ where deal_time>='2014111305' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 group by card_id) weekday_4 on a.card_id=weekday_4.card_id left outer join 
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as weekend_count_4 from gd_train_data_6
+ where deal_time>='2014111305' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))>=5 group by card_id) weekend_4 on a.card_id=weekend_4.card_id left outer join
+(select card_id,count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as traffic_count_4 from gd_train_data_6
+ where deal_time>='2014111305' and deal_time<'2014121105' and weekday(to_date(deal_time,'yyyymmddhh'))<5 and ((datepart(to_date(deal_time,'yyyymmddhh'),'hh')>6 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<11) or (datepart(to_date(deal_time,'yyyymmddhh'),'hh')>15 and datepart(to_date(deal_time,'yyyymmddhh'),'hh')<19))  group by card_id) traffic_4 on a.card_id=traffic_4.card_id; 
+
+drop table if exists road_6_level_14_test_point3_365; create table road_6_level_14_test_point3_365 as select 
+a.card_id , level_14_0, level_14_1, level_14_2, level_14_3, level_14_4, level_14_5
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_14_0 from gd_train_data_6 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_14_0 on a.card_id=table_level_14_0.card_id 
+left outer join (select card_id, count(*) as level_14_1 from gd_train_data_6 where deal_time>='2014112505' and deal_time<'2014112705' group by card_id) table_level_14_1 on a.card_id=table_level_14_1.card_id 
+left outer join (select card_id, count(*) as level_14_2 from gd_train_data_6 where deal_time>='2014111105' and deal_time<'2014111305' group by card_id) table_level_14_2 on a.card_id=table_level_14_2.card_id 
+left outer join (select card_id, count(*) as level_14_3 from gd_train_data_6 where deal_time>='2014102805' and deal_time<'2014103005' group by card_id) table_level_14_3 on a.card_id=table_level_14_3.card_id 
+left outer join (select card_id, count(*) as level_14_4 from gd_train_data_6 where deal_time>='2014101405' and deal_time<'2014101605' group by card_id) table_level_14_4 on a.card_id=table_level_14_4.card_id 
+left outer join (select card_id, count(*) as level_14_5 from gd_train_data_6 where deal_time>='2014093005' and deal_time<'2014100205' group by card_id) table_level_14_5 on a.card_id=table_level_14_5.card_id 
+;
+
+
+drop table if exists road_6_level_28_test_point3_365; create table road_6_level_28_test_point3_365 as select 
+a.card_id , level_28_0, level_28_1, level_28_2
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_28_0 from gd_train_data_6 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_28_0 on a.card_id=table_level_28_0.card_id 
+left outer join (select card_id, count(*) as level_28_1 from gd_train_data_6 where deal_time>='2014111105' and deal_time<'2014111305' group by card_id) table_level_28_1 on a.card_id=table_level_28_1.card_id 
+left outer join (select card_id, count(*) as level_28_2 from gd_train_data_6 where deal_time>='2014101405' and deal_time<'2014101605' group by card_id) table_level_28_2 on a.card_id=table_level_28_2.card_id 
+;
+
+
+drop table if exists road_6_level_3_test_point3_365; create table road_6_level_3_test_point3_365 as select 
+a.card_id , level_3_0, level_3_1, level_3_2, level_3_3, level_3_4, level_3_5, level_3_6, level_3_7, level_3_8, level_3_9, level_3_10, level_3_11, level_3_12, level_3_13, level_3_14
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_3_0 from gd_train_data_6 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_3_0 on a.card_id=table_level_3_0.card_id 
+left outer join (select card_id, count(*) as level_3_1 from gd_train_data_6 where deal_time>='2014120605' and deal_time<'2014120805' group by card_id) table_level_3_1 on a.card_id=table_level_3_1.card_id 
+left outer join (select card_id, count(*) as level_3_2 from gd_train_data_6 where deal_time>='2014120305' and deal_time<'2014120505' group by card_id) table_level_3_2 on a.card_id=table_level_3_2.card_id 
+left outer join (select card_id, count(*) as level_3_3 from gd_train_data_6 where deal_time>='2014113005' and deal_time<'2014120205' group by card_id) table_level_3_3 on a.card_id=table_level_3_3.card_id 
+left outer join (select card_id, count(*) as level_3_4 from gd_train_data_6 where deal_time>='2014112705' and deal_time<'2014112905' group by card_id) table_level_3_4 on a.card_id=table_level_3_4.card_id 
+left outer join (select card_id, count(*) as level_3_5 from gd_train_data_6 where deal_time>='2014112405' and deal_time<'2014112605' group by card_id) table_level_3_5 on a.card_id=table_level_3_5.card_id 
+left outer join (select card_id, count(*) as level_3_6 from gd_train_data_6 where deal_time>='2014112105' and deal_time<'2014112305' group by card_id) table_level_3_6 on a.card_id=table_level_3_6.card_id 
+left outer join (select card_id, count(*) as level_3_7 from gd_train_data_6 where deal_time>='2014111805' and deal_time<'2014112005' group by card_id) table_level_3_7 on a.card_id=table_level_3_7.card_id 
+left outer join (select card_id, count(*) as level_3_8 from gd_train_data_6 where deal_time>='2014111505' and deal_time<'2014111705' group by card_id) table_level_3_8 on a.card_id=table_level_3_8.card_id 
+left outer join (select card_id, count(*) as level_3_9 from gd_train_data_6 where deal_time>='2014111205' and deal_time<'2014111405' group by card_id) table_level_3_9 on a.card_id=table_level_3_9.card_id 
+left outer join (select card_id, count(*) as level_3_10 from gd_train_data_6 where deal_time>='2014110905' and deal_time<'2014111105' group by card_id) table_level_3_10 on a.card_id=table_level_3_10.card_id 
+left outer join (select card_id, count(*) as level_3_11 from gd_train_data_6 where deal_time>='2014110605' and deal_time<'2014110805' group by card_id) table_level_3_11 on a.card_id=table_level_3_11.card_id 
+left outer join (select card_id, count(*) as level_3_12 from gd_train_data_6 where deal_time>='2014110305' and deal_time<'2014110505' group by card_id) table_level_3_12 on a.card_id=table_level_3_12.card_id 
+left outer join (select card_id, count(*) as level_3_13 from gd_train_data_6 where deal_time>='2014103105' and deal_time<'2014110205' group by card_id) table_level_3_13 on a.card_id=table_level_3_13.card_id 
+left outer join (select card_id, count(*) as level_3_14 from gd_train_data_6 where deal_time>='2014102805' and deal_time<'2014103005' group by card_id) table_level_3_14 on a.card_id=table_level_3_14.card_id 
+;
+
+
+drop table if exists road_6_level_2_test_point3_365; create table road_6_level_2_test_point3_365 as select 
+a.card_id , level_2_0, level_2_1, level_2_2, level_2_3, level_2_4, level_2_5, level_2_6, level_2_7, level_2_8, level_2_9, level_2_10, level_2_11, level_2_12, level_2_13
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_2_0 from gd_train_data_6 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_2_0 on a.card_id=table_level_2_0.card_id 
+left outer join (select card_id, count(*) as level_2_1 from gd_train_data_6 where deal_time>='2014120705' and deal_time<'2014120905' group by card_id) table_level_2_1 on a.card_id=table_level_2_1.card_id 
+left outer join (select card_id, count(*) as level_2_2 from gd_train_data_6 where deal_time>='2014120505' and deal_time<'2014120705' group by card_id) table_level_2_2 on a.card_id=table_level_2_2.card_id 
+left outer join (select card_id, count(*) as level_2_3 from gd_train_data_6 where deal_time>='2014120305' and deal_time<'2014120505' group by card_id) table_level_2_3 on a.card_id=table_level_2_3.card_id 
+left outer join (select card_id, count(*) as level_2_4 from gd_train_data_6 where deal_time>='2014120105' and deal_time<'2014120305' group by card_id) table_level_2_4 on a.card_id=table_level_2_4.card_id 
+left outer join (select card_id, count(*) as level_2_5 from gd_train_data_6 where deal_time>='2014112905' and deal_time<'2014120105' group by card_id) table_level_2_5 on a.card_id=table_level_2_5.card_id 
+left outer join (select card_id, count(*) as level_2_6 from gd_train_data_6 where deal_time>='2014112705' and deal_time<'2014112905' group by card_id) table_level_2_6 on a.card_id=table_level_2_6.card_id 
+left outer join (select card_id, count(*) as level_2_7 from gd_train_data_6 where deal_time>='2014112505' and deal_time<'2014112705' group by card_id) table_level_2_7 on a.card_id=table_level_2_7.card_id 
+left outer join (select card_id, count(*) as level_2_8 from gd_train_data_6 where deal_time>='2014112305' and deal_time<'2014112505' group by card_id) table_level_2_8 on a.card_id=table_level_2_8.card_id 
+left outer join (select card_id, count(*) as level_2_9 from gd_train_data_6 where deal_time>='2014112105' and deal_time<'2014112305' group by card_id) table_level_2_9 on a.card_id=table_level_2_9.card_id 
+left outer join (select card_id, count(*) as level_2_10 from gd_train_data_6 where deal_time>='2014111905' and deal_time<'2014112105' group by card_id) table_level_2_10 on a.card_id=table_level_2_10.card_id 
+left outer join (select card_id, count(*) as level_2_11 from gd_train_data_6 where deal_time>='2014111705' and deal_time<'2014111905' group by card_id) table_level_2_11 on a.card_id=table_level_2_11.card_id 
+left outer join (select card_id, count(*) as level_2_12 from gd_train_data_6 where deal_time>='2014111505' and deal_time<'2014111705' group by card_id) table_level_2_12 on a.card_id=table_level_2_12.card_id 
+left outer join (select card_id, count(*) as level_2_13 from gd_train_data_6 where deal_time>='2014111305' and deal_time<'2014111505' group by card_id) table_level_2_13 on a.card_id=table_level_2_13.card_id 
+;
+
+
+drop table if exists road_6_level_7_test_point3_365; create table road_6_level_7_test_point3_365 as select 
+a.card_id , level_7_0, level_7_1, level_7_2, level_7_3, level_7_4, level_7_5, level_7_6, level_7_7, level_7_8, level_7_9
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_7_0 from gd_train_data_6 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_7_0 on a.card_id=table_level_7_0.card_id 
+left outer join (select card_id, count(*) as level_7_1 from gd_train_data_6 where deal_time>='2014120205' and deal_time<'2014120405' group by card_id) table_level_7_1 on a.card_id=table_level_7_1.card_id 
+left outer join (select card_id, count(*) as level_7_2 from gd_train_data_6 where deal_time>='2014112505' and deal_time<'2014112705' group by card_id) table_level_7_2 on a.card_id=table_level_7_2.card_id 
+left outer join (select card_id, count(*) as level_7_3 from gd_train_data_6 where deal_time>='2014111805' and deal_time<'2014112005' group by card_id) table_level_7_3 on a.card_id=table_level_7_3.card_id 
+left outer join (select card_id, count(*) as level_7_4 from gd_train_data_6 where deal_time>='2014111105' and deal_time<'2014111305' group by card_id) table_level_7_4 on a.card_id=table_level_7_4.card_id 
+left outer join (select card_id, count(*) as level_7_5 from gd_train_data_6 where deal_time>='2014110405' and deal_time<'2014110605' group by card_id) table_level_7_5 on a.card_id=table_level_7_5.card_id 
+left outer join (select card_id, count(*) as level_7_6 from gd_train_data_6 where deal_time>='2014102805' and deal_time<'2014103005' group by card_id) table_level_7_6 on a.card_id=table_level_7_6.card_id 
+left outer join (select card_id, count(*) as level_7_7 from gd_train_data_6 where deal_time>='2014102105' and deal_time<'2014102305' group by card_id) table_level_7_7 on a.card_id=table_level_7_7.card_id 
+left outer join (select card_id, count(*) as level_7_8 from gd_train_data_6 where deal_time>='2014101405' and deal_time<'2014101605' group by card_id) table_level_7_8 on a.card_id=table_level_7_8.card_id 
+left outer join (select card_id, count(*) as level_7_9 from gd_train_data_6 where deal_time>='2014100705' and deal_time<'2014100905' group by card_id) table_level_7_9 on a.card_id=table_level_7_9.card_id 
+;
+
+
+drop table if exists road_6_level_21_test_point3_365; create table road_6_level_21_test_point3_365 as select 
+a.card_id , level_21_0, level_21_1, level_21_2, level_21_3
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select card_id, count(*) as level_21_0 from gd_train_data_6 where deal_time>='2014120905' and deal_time<'2014121105' group by card_id) table_level_21_0 on a.card_id=table_level_21_0.card_id 
+left outer join (select card_id, count(*) as level_21_1 from gd_train_data_6 where deal_time>='2014111805' and deal_time<'2014112005' group by card_id) table_level_21_1 on a.card_id=table_level_21_1.card_id 
+left outer join (select card_id, count(*) as level_21_2 from gd_train_data_6 where deal_time>='2014102805' and deal_time<'2014103005' group by card_id) table_level_21_2 on a.card_id=table_level_21_2.card_id 
+left outer join (select card_id, count(*) as level_21_3 from gd_train_data_6 where deal_time>='2014100705' and deal_time<'2014100905' group by card_id) table_level_21_3 on a.card_id=table_level_21_3.card_id 
+;
+
+
+drop table if exists road_6_first_last_test_point3_365; create table road_6_first_last_test_point3_365 as select 
+ a.card_id,last_visit,first_visit,(first_visit-last_visit) as visit_range,(last_2_visit-last_visit) as visit_range2 
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select t1.card_id,cast((1418227200 - unix_timestamp(to_date(t1.deal_time,'yyyymmddhh')))/86400 as int) as last_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data_6 where deal_time<'20141211') t1 where t1.rank=1 ) table_last on a.card_id=table_last.card_id 
+left outer join (select t2.card_id,cast((1418227200 - unix_timestamp(to_date(t2.deal_time,'yyyymmddhh')))/86400 as int) as first_visit  from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time asc) as rank from gd_train_data_6 where deal_time<'20141211') t2 where t2.rank=1 ) table_first on a.card_id=table_first.card_id 
+left outer join (select t3.card_id,cast((1418227200 - unix_timestamp(to_date(t3.deal_time,'yyyymmddhh')))/86400 as int) as last_2_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data_6 where deal_time<'20141211') t3 where t3.rank=2 ) table_last_2 on a.card_id=table_last_2.card_id 
+;
+
+
+drop table if exists road_6_all_road_first_last_test_point3_365; create table road_6_all_road_first_last_test_point3_365 as select 
+ a.card_id,last_visit as allroad_last_visit,first_visit as allroad_first_visit,(first_visit-last_visit) as allroad_visit_range,(last_2_visit-last_visit) as allroad_visit_range2 
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+left outer join (select t1.card_id,cast((1418227200 - unix_timestamp(to_date(t1.deal_time,'yyyymmddhh')))/86400 as int) as last_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data where deal_time<'20141211') t1 where t1.rank=1 ) table_last on a.card_id=table_last.card_id 
+left outer join (select t2.card_id,cast((1418227200 - unix_timestamp(to_date(t2.deal_time,'yyyymmddhh')))/86400 as int) as first_visit  from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time asc) as rank from gd_train_data where deal_time<'20141211') t2 where t2.rank=1 ) table_first on a.card_id=table_first.card_id 
+left outer join (select t3.card_id,cast((1418227200 - unix_timestamp(to_date(t3.deal_time,'yyyymmddhh')))/86400 as int) as last_2_visit from (select card_id,deal_time,row_number() over(partition by card_id order by deal_time desc) as rank from gd_train_data where deal_time<'20141211') t3 where t3.rank=2 ) table_last_2 on a.card_id=table_last_2.card_id 
+;
+
+
+drop table if exists road_6_all_count_test_point3_365; create table road_6_all_count_test_point3_365 as select 
+a.card_id,all_count,one_count/all_count as road_count_percent 
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+ left outer join (select card_id,count(*) as one_count from gd_train_data_6 where deal_time<'20141211' group by card_id ) t1 on t1.card_id=a.card_id 
+ left outer join (select card_id,count(*) as all_count from gd_train_data where deal_time<'20141211' group by card_id ) t2 on t2.card_id=a.card_id ;
+
+
+drop table if exists road_6_allroad_weather_count_test_point3_365; create table road_6_allroad_weather_count_test_point3_365 as select 
+a.card_id , allroad_weather_0 , allroad_weather_0/allroad_weather_all as allroad_weather_0_percent, allroad_weather_1 , allroad_weather_1/allroad_weather_all as allroad_weather_1_percent, allroad_weather_2 , allroad_weather_2/allroad_weather_all as allroad_weather_2_percent, allroad_weather_3 , allroad_weather_3/allroad_weather_all as allroad_weather_3_percent, allroad_weather_4 , allroad_weather_4/allroad_weather_all as allroad_weather_4_percent, allroad_weather_5 , allroad_weather_5/allroad_weather_all as allroad_weather_5_percent, allroad_weather_6 , allroad_weather_6/allroad_weather_all as allroad_weather_6_percent, allroad_weather_7 , allroad_weather_7/allroad_weather_all as allroad_weather_7_percent, allroad_weather_8 , allroad_weather_8/allroad_weather_all as allroad_weather_8_percent, allroad_weather_9 , allroad_weather_9/allroad_weather_all as allroad_weather_9_percent, allroad_weather_10 , allroad_weather_10/allroad_weather_all as allroad_weather_10_percent, allroad_weather_11 , allroad_weather_11/allroad_weather_all as allroad_weather_11_percent
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+ left outer join (select card_id,count(*) as allroad_weather_0 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_0) group by card_id) t_0 on a.card_id=t_0.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_1 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_1) group by card_id) t_1 on a.card_id=t_1.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_2 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_2) group by card_id) t_2 on a.card_id=t_2.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_3 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_3) group by card_id) t_3 on a.card_id=t_3.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_4 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_4) group by card_id) t_4 on a.card_id=t_4.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_5 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_5) group by card_id) t_5 on a.card_id=t_5.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_6 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_6) group by card_id) t_6 on a.card_id=t_6.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_7 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_7) group by card_id) t_7 on a.card_id=t_7.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_8 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_8) group by card_id) t_8 on a.card_id=t_8.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_9 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_9) group by card_id) t_9 on a.card_id=t_9.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_10 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_10) group by card_id) t_10 on a.card_id=t_10.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_11 from gd_train_data where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_11) group by card_id) t_11 on a.card_id=t_11.card_id 
+ left outer join (select card_id,count(*) as allroad_weather_all from gd_train_data where deal_time<'20141211' group by card_id) ta on ta.card_id=a.card_id;
+
+
+drop table if exists road_6_oneroad_weather_count_test_point3_365; create table road_6_oneroad_weather_count_test_point3_365 as select 
+a.card_id , oneroad_weather_0 , oneroad_weather_0/oneroad_weather_all as oneroad_weather_0_percent, oneroad_weather_1 , oneroad_weather_1/oneroad_weather_all as oneroad_weather_1_percent, oneroad_weather_2 , oneroad_weather_2/oneroad_weather_all as oneroad_weather_2_percent, oneroad_weather_3 , oneroad_weather_3/oneroad_weather_all as oneroad_weather_3_percent, oneroad_weather_4 , oneroad_weather_4/oneroad_weather_all as oneroad_weather_4_percent, oneroad_weather_5 , oneroad_weather_5/oneroad_weather_all as oneroad_weather_5_percent, oneroad_weather_6 , oneroad_weather_6/oneroad_weather_all as oneroad_weather_6_percent, oneroad_weather_7 , oneroad_weather_7/oneroad_weather_all as oneroad_weather_7_percent, oneroad_weather_8 , oneroad_weather_8/oneroad_weather_all as oneroad_weather_8_percent, oneroad_weather_9 , oneroad_weather_9/oneroad_weather_all as oneroad_weather_9_percent, oneroad_weather_10 , oneroad_weather_10/oneroad_weather_all as oneroad_weather_10_percent, oneroad_weather_11 , oneroad_weather_11/oneroad_weather_all as oneroad_weather_11_percent
+ from 
+(select card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a 
+ left outer join (select card_id,count(*) as oneroad_weather_0 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_0) group by card_id) t_0 on a.card_id=t_0.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_1 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_1) group by card_id) t_1 on a.card_id=t_1.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_2 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_2) group by card_id) t_2 on a.card_id=t_2.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_3 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_3) group by card_id) t_3 on a.card_id=t_3.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_4 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_4) group by card_id) t_4 on a.card_id=t_4.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_5 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_5) group by card_id) t_5 on a.card_id=t_5.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_6 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_6) group by card_id) t_6 on a.card_id=t_6.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_7 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_7) group by card_id) t_7 on a.card_id=t_7.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_8 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_8) group by card_id) t_8 on a.card_id=t_8.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_9 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_9) group by card_id) t_9 on a.card_id=t_9.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_10 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_10) group by card_id) t_10 on a.card_id=t_10.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_11 from gd_train_data_6 where deal_time<'20141211' and datetrunc(to_date(deal_time,'yyyymmddhh'),'DD') in 
+(select date_time from weather_days_11) group by card_id) t_11 on a.card_id=t_11.card_id 
+ left outer join (select card_id,count(*) as oneroad_weather_all from gd_train_data_6 where deal_time<'20141211' group by card_id) ta on ta.card_id=a.card_id;
+
+
+drop table if exists label_road_6_test_point3_365; 
+create table label_road_6_test_point3_365 as select 
+ card_id,regexp_replace(cast(length(card_id2) as string),'32','1') as label  from 
+ (select card_id as card_id from gd_train_data_6 where deal_time<'2014121105' group by card_id) a
+ left outer join 
+(select card_id as card_id2 from gd_train_data_6 where deal_time>='2014121105' and deal_time<'2014121805' group by card_id) b on a.card_id=b.card_id2;
+
+
+drop table if exists type_road_6_test_point3_365; create table type_road_6_test_point3_365 as select t.card_id,t.card_type_key,t.create_city_key from 
+(select a.card_id,b.card_type_key,c.create_city_key,row_number() over(partition by a.card_id order by a.card_type desc) as rank from 
+(select card_id,card_type,create_city from gd_train_data_6 where deal_time<'2014121105') a left outer join 
+ (select card_type_key,card_type from card_type_table) b on a.card_type=b.card_type left outer join 
+ (select create_city_key,create_city from create_city_table) c on a.create_city=c.create_city ) t where t.rank=1; 
+
+drop table if exists test_point3_365_data_road_6; 
+create table test_point3_365_data_road_6 as 
+select recent_day_count_road_6_test_point3_365.card_id, recent_day_count_road_6_test_point3_365.day_count_1, recent_day_count_road_6_test_point3_365.day_count_percent_1, recent_day_count_road_6_test_point3_365.day_count_2, recent_day_count_road_6_test_point3_365.day_count_percent_2, recent_day_count_road_6_test_point3_365.day_count_3, recent_day_count_road_6_test_point3_365.day_count_percent_3, recent_day_count_road_6_test_point3_365.day_count_4, recent_day_count_road_6_test_point3_365.day_count_percent_4, recent_day_count_road_6_test_point3_365.day_count_5, recent_day_count_road_6_test_point3_365.day_count_percent_5, recent_day_count_road_6_test_point3_365.day_count_6, recent_day_count_road_6_test_point3_365.day_count_percent_6, recent_day_count_road_6_test_point3_365.day_count_7, recent_day_count_road_6_test_point3_365.day_count_percent_7, recent_day_count_road_6_test_point3_365.day_count_14, recent_day_count_road_6_test_point3_365.day_count_percent_14, recent_day_count_road_6_test_point3_365.day_count_21, recent_day_count_road_6_test_point3_365.day_count_percent_21, recent_day_count_road_6_test_point3_365.day_count_28, recent_day_count_road_6_test_point3_365.day_count_percent_28, recent_day_count_road_6_test_point3_365.day_count_60, recent_day_count_road_6_test_point3_365.day_count_percent_60, recent_day_count_road_6_test_point3_365.day_count_365, count_beyond_two_times_road_6_test_point3_365.beyond_two_count_30, count_beyond_two_times_road_6_test_point3_365.beyond_two_count_3, count_beyond_two_times_road_6_test_point3_365.beyond_two_count_7, count_beyond_two_times_road_6_test_point3_365.beyond_two_count_14, count_beyond_two_times_road_6_test_point3_365.beyond_two_count_21,weekday_weekend_count_road_6_test_point3_365.weekday_count_1, weekday_weekend_count_road_6_test_point3_365.weekend_count_1, weekday_weekend_count_road_6_test_point3_365.weekday_percent_1, weekday_weekend_count_road_6_test_point3_365.traffic_count_1, weekday_weekend_count_road_6_test_point3_365.traffic_percent_1 
+,weekday_weekend_count_road_6_test_point3_365.weekday_count_2, weekday_weekend_count_road_6_test_point3_365.weekend_count_2, weekday_weekend_count_road_6_test_point3_365.weekday_percent_2, weekday_weekend_count_road_6_test_point3_365.traffic_count_2, weekday_weekend_count_road_6_test_point3_365.traffic_percent_2 
+,weekday_weekend_count_road_6_test_point3_365.weekday_count_3, weekday_weekend_count_road_6_test_point3_365.weekend_count_3, weekday_weekend_count_road_6_test_point3_365.weekday_percent_3, weekday_weekend_count_road_6_test_point3_365.traffic_count_3, weekday_weekend_count_road_6_test_point3_365.traffic_percent_3 
+,weekday_weekend_count_road_6_test_point3_365.weekday_count_4, weekday_weekend_count_road_6_test_point3_365.weekend_count_4, weekday_weekend_count_road_6_test_point3_365.weekday_percent_4, weekday_weekend_count_road_6_test_point3_365.traffic_count_4, weekday_weekend_count_road_6_test_point3_365.traffic_percent_4 
+ ,road_6_level_14_test_point3_365.level_14_0 ,road_6_level_14_test_point3_365.level_14_1 ,road_6_level_14_test_point3_365.level_14_2 ,road_6_level_14_test_point3_365.level_14_3 ,road_6_level_14_test_point3_365.level_14_4 ,road_6_level_14_test_point3_365.level_14_5
+ ,road_6_level_28_test_point3_365.level_28_0 ,road_6_level_28_test_point3_365.level_28_1 ,road_6_level_28_test_point3_365.level_28_2
+ ,road_6_level_3_test_point3_365.level_3_0 ,road_6_level_3_test_point3_365.level_3_1 ,road_6_level_3_test_point3_365.level_3_2 ,road_6_level_3_test_point3_365.level_3_3 ,road_6_level_3_test_point3_365.level_3_4 ,road_6_level_3_test_point3_365.level_3_5 ,road_6_level_3_test_point3_365.level_3_6 ,road_6_level_3_test_point3_365.level_3_7 ,road_6_level_3_test_point3_365.level_3_8 ,road_6_level_3_test_point3_365.level_3_9 ,road_6_level_3_test_point3_365.level_3_10 ,road_6_level_3_test_point3_365.level_3_11 ,road_6_level_3_test_point3_365.level_3_12 ,road_6_level_3_test_point3_365.level_3_13 ,road_6_level_3_test_point3_365.level_3_14
+ ,road_6_level_2_test_point3_365.level_2_0 ,road_6_level_2_test_point3_365.level_2_1 ,road_6_level_2_test_point3_365.level_2_2 ,road_6_level_2_test_point3_365.level_2_3 ,road_6_level_2_test_point3_365.level_2_4 ,road_6_level_2_test_point3_365.level_2_5 ,road_6_level_2_test_point3_365.level_2_6 ,road_6_level_2_test_point3_365.level_2_7 ,road_6_level_2_test_point3_365.level_2_8 ,road_6_level_2_test_point3_365.level_2_9 ,road_6_level_2_test_point3_365.level_2_10 ,road_6_level_2_test_point3_365.level_2_11 ,road_6_level_2_test_point3_365.level_2_12 ,road_6_level_2_test_point3_365.level_2_13
+ ,road_6_level_7_test_point3_365.level_7_0 ,road_6_level_7_test_point3_365.level_7_1 ,road_6_level_7_test_point3_365.level_7_2 ,road_6_level_7_test_point3_365.level_7_3 ,road_6_level_7_test_point3_365.level_7_4 ,road_6_level_7_test_point3_365.level_7_5 ,road_6_level_7_test_point3_365.level_7_6 ,road_6_level_7_test_point3_365.level_7_7 ,road_6_level_7_test_point3_365.level_7_8 ,road_6_level_7_test_point3_365.level_7_9
+ ,road_6_level_21_test_point3_365.level_21_0 ,road_6_level_21_test_point3_365.level_21_1 ,road_6_level_21_test_point3_365.level_21_2 ,road_6_level_21_test_point3_365.level_21_3
+, road_6_first_last_test_point3_365.last_visit, road_6_first_last_test_point3_365.first_visit, road_6_first_last_test_point3_365.visit_range, road_6_first_last_test_point3_365.visit_range2, road_6_all_road_first_last_test_point3_365.allroad_last_visit, road_6_all_road_first_last_test_point3_365.allroad_first_visit, road_6_all_road_first_last_test_point3_365.allroad_visit_range, road_6_all_road_first_last_test_point3_365.allroad_visit_range2, road_6_all_count_test_point3_365.all_count, road_6_all_count_test_point3_365.road_count_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_0, road_6_allroad_weather_count_test_point3_365.allroad_weather_0_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_1, road_6_allroad_weather_count_test_point3_365.allroad_weather_1_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_2, road_6_allroad_weather_count_test_point3_365.allroad_weather_2_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_3, road_6_allroad_weather_count_test_point3_365.allroad_weather_3_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_4, road_6_allroad_weather_count_test_point3_365.allroad_weather_4_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_5, road_6_allroad_weather_count_test_point3_365.allroad_weather_5_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_6, road_6_allroad_weather_count_test_point3_365.allroad_weather_6_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_7, road_6_allroad_weather_count_test_point3_365.allroad_weather_7_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_8, road_6_allroad_weather_count_test_point3_365.allroad_weather_8_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_9, road_6_allroad_weather_count_test_point3_365.allroad_weather_9_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_10, road_6_allroad_weather_count_test_point3_365.allroad_weather_10_percent, road_6_allroad_weather_count_test_point3_365.allroad_weather_11, road_6_allroad_weather_count_test_point3_365.allroad_weather_11_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_0, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_0_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_1, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_1_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_2, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_2_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_3, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_3_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_4, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_4_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_5, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_5_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_6, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_6_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_7, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_7_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_8, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_8_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_9, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_9_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_10, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_10_percent, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_11, road_6_oneroad_weather_count_test_point3_365.oneroad_weather_11_percent,type_road_6_test_point3_365.create_city_key,type_road_6_test_point3_365.card_type_key 
+,cast(label_road_6_test_point3_365.label as int) as label 
+from label_road_6_test_point3_365
+ left outer join recent_day_count_road_6_test_point3_365 on label_road_6_test_point3_365.card_id=recent_day_count_road_6_test_point3_365.card_id
+ left outer join count_beyond_two_times_road_6_test_point3_365 on label_road_6_test_point3_365.card_id=count_beyond_two_times_road_6_test_point3_365.card_id
+ left outer join weekday_weekend_count_road_6_test_point3_365 on label_road_6_test_point3_365.card_id=weekday_weekend_count_road_6_test_point3_365.card_id
+ left outer join road_6_level_14_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_level_14_test_point3_365.card_id
+ left outer join road_6_level_28_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_level_28_test_point3_365.card_id
+ left outer join road_6_level_3_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_level_3_test_point3_365.card_id
+ left outer join road_6_level_2_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_level_2_test_point3_365.card_id
+ left outer join road_6_level_7_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_level_7_test_point3_365.card_id
+ left outer join road_6_level_21_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_level_21_test_point3_365.card_id
+ left outer join  road_6_first_last_test_point3_365 on label_road_6_test_point3_365.card_id= road_6_first_last_test_point3_365.card_id
+ left outer join  road_6_all_road_first_last_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_all_road_first_last_test_point3_365.card_id
+ left outer join  road_6_all_count_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_all_count_test_point3_365.card_id
+ left outer join  road_6_allroad_weather_count_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_allroad_weather_count_test_point3_365.card_id
+ left outer join  road_6_oneroad_weather_count_test_point3_365 on label_road_6_test_point3_365.card_id=road_6_oneroad_weather_count_test_point3_365.card_id
+ left outer join type_road_6_test_point3_365 on label_road_6_test_point3_365.card_id=type_road_6_test_point3_365.card_id;
+

@@ -1,0 +1,8 @@
+drop table if exists card_type_table;create table card_type_table as select t2.card_type,t2.card_type , case when t2.card_type_key=1 then 1 else 0 end as card_type_key1
+, case when t2.card_type_key=2 then 1 else 0 end as card_type_key2
+, case when t2.card_type_key=3 then 1 else 0 end as card_type_key3
+, case when t2.card_type_key=4 then 1 else 0 end as card_type_key4
+, case when t2.card_type_key=5 then 1 else 0 end as card_type_key5
+, case when t2.card_type_key=6 then 1 else 0 end as card_type_key6
+, case when t2.card_type_key=7 then 1 else 0 end as card_type_key7
+from (select card_type,row_number() over(partition by num order by num desc) as card_type_key from (select card_type,length('abc') as num from tianchi_gd.p2_gd_train_data group by card_type)t)t2;

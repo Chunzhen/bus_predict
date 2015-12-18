@@ -41,15 +41,14 @@ class Sql_creation(object):
 		#f.write(sql)
 		return sql
 
-	#用户距离截止时间的前（1/2/3/4/5/6/7/10/15/30/60/全部 ）乘坐车的次数
-	#用户在前1天，前5天，前7天，前30天乘车次数占全部乘车次数的比例
+	#用户距离截止时间的前（1/2/3/4/5/6/7/14/21/28/全部 ）乘坐车的次数
+	#用户在前1/2/3/4/5/6/7/14/21/28天乘车次数占全部乘车次数的比例
 	def last_recent_day_count_sql(self,road,type):
 		base_day=self.__base_day
 		recent_day=self.__recent_day
 		d_base=datetime.strptime(str(base_day),'%Y%m%d')
 		timestamp=time.mktime(d_base.timetuple())
 		#f=file(u'sql/'+base_day+'_road_'+road+'_recent_day_count.txt','wb')
-		#print timestamp
 		sql=""
 		sql+="drop table if exists recent_day_count_road_"+road+"_"+type+"; create table recent_day_count_road_"+road+"_"+type+" as select \n"
 		inner_sql=""
@@ -59,7 +58,9 @@ class Sql_creation(object):
 			r_timestamp=timestamp-x*86400
 			d=datetime.fromtimestamp(float(r_timestamp))
 			dStr=str(d.year)+self.add_zero(d.month)+self.add_zero(d.day)+'05'
-			sql_str=u"left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_"+str(x)+" from gd_train_data_"+road+" where deal_time>='"+dStr+"' and deal_time<'"+base_day+"05' group by Card_id) table_day_count_"+str(x)+" on a.card_id=table_day_count_"+str(x)+".card_id \n"
+			sql_str=u"left outer join (select Card_id, count(distinct(datetrunc(to_date(deal_time,'yyyymmddhh'),'DD'))) as day_count_"+str(x)
+			sql_str+=u" from gd_train_data_"+road+" where deal_time>='"+dStr+"' and deal_time<'"+base_day+"05' group by Card_id) table_day_count_"+str(x)
+			sql_str+=u" on a.card_id=table_day_count_"+str(x)+".card_id \n"
 			inner_select+=", day_count_"+str(x)
 			if x<=60:
 				inner_select+=", (cast(day_count_"+str(x)+" as double) / cast(day_count_365 as double)) as day_count_percent_"+str(x)
